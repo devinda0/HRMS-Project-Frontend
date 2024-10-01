@@ -10,16 +10,19 @@ import { ModeProvider } from './context/ModeContext';
 
 function App() {
   return (
-    <ModeProvider>  
-      <BrowserRouter>
-        <Navbar />  
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/pim-module" element={<PIMModule />} />
-          <Route path="/absent-management" element={<AbsentManagement />} />
-        </Routes>
-      </BrowserRouter>
-    </ModeProvider>
+    <AuthProvider>
+      <ModeProvider>  
+        <BrowserRouter>
+          <Navbar />  
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/pim-module" element={<PIMModule />} />
+            <Route path="/absent-management" element={<AbsentManagement />} />
+          </Routes>
+        </BrowserRouter>
+      </ModeProvider>
+    </AuthProvider>
   );
 }
 

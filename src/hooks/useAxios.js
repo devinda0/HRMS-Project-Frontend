@@ -29,7 +29,7 @@ const useAxios = () => {
             }
         );
 
-    },[accessToken])
+    },[accessToken, axiosInstance]);
 
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const useAxios = () => {
                 return Promise.reject(error);
             }
         );
-    },[])
+    },[accessToken, axiosInstance, refreshToken]);
     
     
     
