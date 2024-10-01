@@ -8,7 +8,7 @@ import PendingRequest from '../../Components/PendingRequest/PendingRequest';
 import ApprovedRequests from '../../Components/ApprovedRequests/ApprovedRequests';
 import PendingLeave from '../../Components/PendingLeave/PendingLeave';
 import ApprovedLeaves from '../../Components/ApprovedLeave/ApprovedLeave';
-import Leave from '../../pages/Leave/Leave'; 
+import Leave from '../Leave/Leave'; 
 const AbsentManagement = () => {
   const { isEmployeeMode } = useContext(ModeContext); 
 
@@ -68,7 +68,7 @@ const AbsentManagement = () => {
                 />
               </div>
               <div className='basis-4/5 items-center ml-4 mt-1'>
-                <h1 className="text-3xl font-bold mb-3">Emily Anderson</h1>
+                <h1 className="text-3xl font-bold mb-3 font-lexend">Emily Anderson</h1>
                 <ModeToggleButton />
               </div>
             </div>

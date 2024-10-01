@@ -22,7 +22,7 @@ const Navbar = () => {
           to="/"
           className={`${
             activeLink === 'Home' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600'
-          } font-medium transition-colors`}
+          } font-medium font-manrope transition-colors`}
           onClick={() => setActiveLink('Home')}
         >
           Home
@@ -32,7 +32,7 @@ const Navbar = () => {
           to="/pim-module"
           className={`${
             activeLink === 'PIM Module' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600'
-          } font-medium transition-colors`}
+          } font-medium font-manrope transition-colors`}
           onClick={() => setActiveLink('PIM Module')}
         >
           PIM Module
@@ -42,7 +42,7 @@ const Navbar = () => {
           to="/absent-management"
           className={`${
             activeLink === 'Absent Management' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600'
-          } font-medium transition-colors`}
+          } font-medium font-manrope transition-colors`}
           onClick={() => setActiveLink('Absent Management')}
         >
           Absent Management
@@ -52,7 +52,7 @@ const Navbar = () => {
       {/* Profile Section */}
       <div className="flex items-center space-x-2 ">
       <div className="flex items-center justify-center border border-black bg-white rounded-md px-3 py-1">
-          <span className="text-sm font-medium">Employee Mode</span>
+          <span className="text-sm font-medium font-poppins">Employee Mode</span>
         </div>
       <Menu as="div" className="relative inline-block ">
         <Menu.Button className="flex items-center space-x-2 focus:outline-none" aria-label="User menu">

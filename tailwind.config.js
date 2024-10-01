@@ -8,6 +8,7 @@ module.exports = {
       fontFamily:{
         lexend: ['Lexend', 'sans-serif'],
         manrope: ['Manrope', 'sans-serif'],
+        poppins:['Poppins','sans-serif'],
       },
       colors:{
         custompurple:'#EDE7F6',
