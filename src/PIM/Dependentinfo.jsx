@@ -23,6 +23,20 @@ function Dependent_info({edit}){
     const closePopup = () => {
         setShowPopup(false);
     };
+    const dependants=[
+        {
+            name:"Dhruva Doe",
+            relation:"son"
+        },
+        {
+          name:"Samua Doe",
+          relation:"son"
+        },
+        {
+            name:"Samua Doe",
+            relation:"son"
+        }
+    ]
     
     
     return (
@@ -45,21 +59,10 @@ function Dependent_info({edit}){
               
             </thead>
             <tbody  className="raws">
-                <tr>
-                    <td>Dhruva Doe</td>
-                    <td>Son</td>
-                    {(edit==true)&&( 
-                    <td>
-                        <button type="button" class="edit-btn" onClick={()=>setShowPopup(true)}>
-                            < FiEdit className="icon"/>
-                        </button>
-                        
-                    </td>
-                    )}
-                </tr>
-                <tr>
-                    <td>Kumar Doe</td>
-                    <td>Son</td>
+                {dependants.map(dependant=>(
+                    <tr>
+                    <td>{dependant.name}</td>
+                    <td>{dependant.relation}</td>
                     {(edit==true)&&( 
                     <td>
                         
@@ -71,6 +74,9 @@ function Dependent_info({edit}){
                     )}
 
                 </tr>
+
+                ))}
+                
             </tbody>
         </table>
         
