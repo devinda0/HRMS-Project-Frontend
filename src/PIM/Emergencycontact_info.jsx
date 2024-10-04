@@ -7,6 +7,22 @@ function Emergency_contact_info({edit}){
     const closePopup = () => {
         setShowPopup(false);
     }
+    const Emergency_info=[
+        {
+            number:"+94716843128",
+            realtion:"son"
+        },
+        {
+            number:"+9471536447",
+            realtion:"spouse"
+        },
+        {
+            number:"+9471536447",
+            realtion:"spouse"
+        },
+        
+
+    ]
  return (
     <>
     <div class="table-container">
@@ -26,9 +42,10 @@ function Emergency_contact_info({edit}){
             </tr>
         </thead>
         <tbody  className="raws">
-            <tr>
-                <td>+9471722482</td>
-                <td>Son</td>
+            {Emergency_info.map(item=>(
+                <tr>
+                <td>{item.number}</td>
+                <td>{item.realtion}</td>
                 {(edit==true)&&( 
                 <td>
                     <button type="button" class="edit-btn" onClick={()=>setShowPopup(true)}>
@@ -37,17 +54,10 @@ function Emergency_contact_info({edit}){
                 </td>
                 )}
             </tr>
-            <tr>
-                <td>+94726246464</td>
-                <td>Son</td>
-                {(edit==true)&&( 
-                <td>
-                    <button type="button" class="edit-btn" onClick={()=>setShowPopup(true)}>
-                        < FiEdit className="icon"/>
-                    </button>
-                </td>
-                )} 
-            </tr>
+            
+
+            ))}
+            
         </tbody>
     </table>
     </div>
