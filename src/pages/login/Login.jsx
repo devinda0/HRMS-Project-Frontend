@@ -1,12 +1,12 @@
 import React from 'react'
-import axios from '../../api/axios';
+import { axiosWithCredential } from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
-import WaitingSpinner from '../../Components/Popup/WaitingSpinner';
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
 const Login = () => {
     const [formData, setFormData] = React.useState({username: '', password: ''});
     const {setAccessToken, setRole} = useAuth();
-    const {Spinner, setWaiting} = WaitingSpinner();
+    const setWaitingSpinner = useWaitingSpinner();
 
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
@@ -14,9 +14,9 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setWaiting(true);
+        setWaitingSpinner(true);
 
-        axios.post('/user/login', formData)
+        axiosWithCredential.post('/user/login', formData)
             .then((res) => {
                 console.log(res.data);
                 setAccessToken(res.data.accessToken);
@@ -26,7 +26,7 @@ const Login = () => {
                 console.log(err);
             })
             .finally(() => {
-                setWaiting(false);
+                setWaitingSpinner(false);
             })
     }
     
@@ -51,7 +51,6 @@ const Login = () => {
                 <button className=' w-full h-[3.5rem] bg-[#6750A4] rounded-lg text-white text-2xl my-5 hover:shadow-xl active:translate-y-1 transition-transform duration-150' type="submit">Login</button>
             </form>
         </div>
-        <Spinner />
     </div>
   )
 }

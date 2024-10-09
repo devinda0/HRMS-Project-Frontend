@@ -3,9 +3,27 @@ import { Menu } from '@headlessui/react';
 import { Link } from 'react-router-dom';  // Import Link
 import logo from '../Assets/logo.png'
 import profile from '../Assets/pofile.jpg'
+import useAuth from '../../hooks/useAuth';
+import { axiosWithCredential } from '../../api/axios';
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
 const Navbar = () => {
   const [activeLink, setActiveLink] = useState('Absent Management');
+  const {setAccessToken} = useAuth();
+  const setWaitingSpinner = useWaitingSpinner();
+
+  const handleLogout = () => {
+    setWaitingSpinner(true);
+
+    axiosWithCredential.post('/user/logout')
+      .then(() => {
+        setAccessToken(null);
+      }).catch((err) => {
+        console.log(err);
+      }).finally(() => {
+        setWaitingSpinner(false);
+      });
+  };
 
   return (
     <nav className="flex items-center justify-between px-6 py-3 bg-white shadow-md">
@@ -82,7 +100,7 @@ const Navbar = () => {
           <Menu.Item>
             {({ active }) => (
               <button
-                onClick={() => console.log('Logout clicked')}
+                onClick={handleLogout}
                 className={`block w-full text-left px-4 py-2 text-sm ${active ? 'bg-gray-100' : ''}`}
               >
                 Logout
