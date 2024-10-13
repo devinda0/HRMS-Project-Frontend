@@ -9,6 +9,7 @@ module.exports = {
         lexend: ['Lexend', 'sans-serif'],
         manrope: ['Manrope', 'sans-serif'],
         poppins:['Poppins','sans-serif'],
+        inter:['Inter','sans-serif']
       },
       colors:{
         custompurple:'#EDE7F6',
@@ -21,7 +22,8 @@ module.exports = {
         ash:'#BDC1CA',
         customblue:'#1478EE2E',
         textcolor:'#171A1F',
-        bordercolor:'#BDC1CA'
+        bordercolor:'#BDC1CA',
+        background1:'#9EBAE2'
 
       },
     },
