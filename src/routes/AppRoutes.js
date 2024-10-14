@@ -7,7 +7,10 @@ import PIMModule from '../pages/PIMModule/Pim_module';
 import AbsentManagement from '../pages/AbsentManagement/AbsentManagement';
 import useAuth from '../hooks/useAuth';
 import useRefreshToken from '../hooks/useRefreshToken';
+<<<<<<< HEAD
 import Reports from '../pages/Reports/Reports';
+=======
+>>>>>>> 6156533 (remove initial waiting spiner loading)
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
