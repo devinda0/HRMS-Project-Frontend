@@ -6,9 +6,9 @@ export const WaitingContext = React.createContext();
 const WaitingProvider = ({children}) => {
     const {Spinner, setWaiting} = WaitingSpinner();
 
-    useEffect(() => {
-        setWaiting(true);
-    },[setWaiting]);
+    // useEffect(() => {
+    //     setWaiting(true);
+    // },[setWaiting]);
 
   return (
     <WaitingContext.Provider value={setWaiting}>

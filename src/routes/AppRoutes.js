@@ -7,18 +7,15 @@ import PIMModule from '../pages/PIMModule/Pim_module';
 import AbsentManagement from '../pages/AbsentManagement/AbsentManagement';
 import useAuth from '../hooks/useAuth';
 import useRefreshToken from '../hooks/useRefreshToken';
-import useWaitingSpinner from '../hooks/useWaitingSpinner';
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
     const refreshToken = useRefreshToken();
-    const setWaitingSpinner = useWaitingSpinner();
 
     useEffect(() => {
         if(!refreshToken) return;
 
         refreshToken();
-        setWaitingSpinner(false);
 
     }, [refreshToken]);
 
