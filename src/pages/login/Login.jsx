@@ -18,7 +18,7 @@ const Login = () => {
 
         axiosWithCredential.post('/user/login', formData)
             .then((res) => {
-                console.log(res.data);
+                console.log(res.data.accessToken);
                 setAccessToken(res.data.accessToken);
                 setRole(res.data.role);
             })
