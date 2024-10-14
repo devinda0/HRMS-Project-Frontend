@@ -8,9 +8,13 @@ import AbsentManagement from '../pages/AbsentManagement/AbsentManagement';
 import useAuth from '../hooks/useAuth';
 import useRefreshToken from '../hooks/useRefreshToken';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Reports from '../pages/Reports/Reports';
 =======
 >>>>>>> 6156533 (remove initial waiting spiner loading)
+=======
+import Reports from '../pages/Reports/Reports';
+>>>>>>> 1d721ab (fix merg errors)
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
