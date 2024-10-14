@@ -7,6 +7,7 @@ import PIMModule from '../pages/PIMModule/Pim_module';
 import AbsentManagement from '../pages/AbsentManagement/AbsentManagement';
 import useAuth from '../hooks/useAuth';
 import useRefreshToken from '../hooks/useRefreshToken';
+import Reports from '../pages/Reports/Reports';
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
@@ -38,6 +39,7 @@ const AppRoutes = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/pim-module" element={<PIMModule />} />
                     <Route path="/absent-management" element={<AbsentManagement />} />
+                    <Route path="/reports" element={<Reports />} />
                 </Route>
                 :
                 <Route path='*' element={<Navigate to='/login' />} />
