@@ -37,8 +37,7 @@ const Login = () => {
   const test2 = () => {
     refreshToken();
   };
-
-
+  
   return (
     <div className="flex h-screen bg-background1">
       {/* Left section for the logo and image */}

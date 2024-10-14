@@ -9,12 +9,15 @@ import useAuth from '../hooks/useAuth';
 import useRefreshToken from '../hooks/useRefreshToken';
 
 const AppRoutes = () => {
-    const {accessToken, setAccessToken} = useAuth();
+    const {accessToken} = useAuth();
     const refreshToken = useRefreshToken();
 
     useEffect(() => {
-        setAccessToken(refreshToken());
-    }, [refreshToken, setAccessToken]);
+        if(!refreshToken) return;
+
+        refreshToken();
+
+    }, [refreshToken]);
 
 
   return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'; 
+import useAxios from '../../hooks/useAxios';
 
 const LeaveApplication = () => {
   const [leaveType, setLeaveType] = useState('');
@@ -8,20 +9,28 @@ const LeaveApplication = () => {
   const [toDate, setToDate] = useState(null);
   const [reason, setReason] = useState('');
   const [attachments, setAttachments] = useState([]);
+  const axios = useAxios();
 
-  const handleSubmit = () => {
-    console.log('Leave Application Submitted:', {
-      leaveType,
-      fromDate,
-      toDate,
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(!axios) return;
+
+    axios.post('/absence/leave', {
+      leave_type : leaveType,
+      start_date : (new Date(fromDate)).toISOString().split('T')[0],
+      end_date : (new Date(toDate)).toISOString().split('T')[0],
       reason,
-      attachments,
+    }).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
     });
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className="p-6 bg-custompurple border-4 border-darkpurple">
+      <form onSubmit={handleSubmit} className="p-6 bg-custompurple border-4 border-darkpurple">
         <h2 className="text-2xl font-bold mb-4 font-lexend">Leave Application</h2>
 
         <div className="mb-4">
@@ -32,9 +41,10 @@ const LeaveApplication = () => {
             onChange={(e) => setLeaveType(e.target.value)}
           >
             <option value="">Choose</option>
-            <option value="Annual Leave">Annual Leave</option>
-            <option value="Sick Leave">Sick Leave</option>
-            <option value="Casual Leave">Casual Leave</option>
+            <option value="Annual">Annual Leave</option>
+            <option value="Casual">Casual Leave</option>
+            <option value="Maternity">Maternity Leave</option>
+            <option value="No-pay">No-Pay Leave</option>
           </select>
         </div>
 
@@ -80,11 +90,12 @@ const LeaveApplication = () => {
 
         <button
           className="bg-[#023F81] w-full mt-4 text-white font-manrope font-normal px-4 py-4 rounded-full hover:bg-blue-600"
+          type='submit'
           onClick={handleSubmit}
         >
           Submit
         </button>
-      </div>
+      </form>
     </LocalizationProvider>
   );
 };
