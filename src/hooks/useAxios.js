@@ -1,20 +1,13 @@
 import useAuth  from './useAuth';
 import { useEffect } from 'react';
-import axios from 'axios';
 import useRefreshToken from './useRefreshToken';
+import axiosInstance from '../api/axios';
 
 
 const useAxios = () => {
 
     const {accessToken} = useAuth();
     const refreshToken = useRefreshToken();
-
-    const axiosInstance = axios.create({
-        baseURL: process.env.REACT_APP_API_URL,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
 
     useEffect(() => {
         axiosInstance.interceptors.request.use(
@@ -29,7 +22,7 @@ const useAxios = () => {
             }
         );
 
-    },[accessToken, axiosInstance]);
+    },[accessToken]);
 
 
     useEffect(() => {
@@ -50,7 +43,7 @@ const useAxios = () => {
                 return Promise.reject(error);
             }
         );
-    },[accessToken, axiosInstance, refreshToken]);
+    },[accessToken, refreshToken]);
     
     
     

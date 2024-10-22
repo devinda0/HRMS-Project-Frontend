@@ -7,13 +7,14 @@ const useRefreshToken = () => {
     const refreshToken = () => {
         let accessToken;
 
-        axiosWithCredential.get('/refresh_token')
+        axiosWithCredential.post('/user/refresh_token')
             .then((res) => {
                 accessToken = res.data.accessToken;
                 setAccessToken(res.data.accessToken);
             })
             .catch((err) => {
                 console.log(err);
+                setAccessToken(null);
             })
         
         return accessToken;
