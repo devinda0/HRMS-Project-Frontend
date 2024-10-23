@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
-import Job_role_info from "../Jobroleinfo/Jobroleinfo.jsx";
+import Job_role_info from "../jobroleinfo/jobroleinfo.jsx";
 import Dependent_info from "../Dependentinfo/Dependentinfo.jsx";
-import { userContext } from "../../pages/PIMModule/Pim_module.jsx";
-import Emergency_contact_info from "../Emergancycontact_info/Emergancycontact_info.jsx";
+import { userContext } from "../PIM_view/PIM_view";
+import Emergency_contact_info from "../Emergancycontact_info/Emergencycontact_info.jsx";
 import { useNavigate } from 'react-router-dom';
 
 function Personalinfo() {
@@ -58,7 +58,7 @@ function Backbutton(){
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(person),
+      body: JSON.stringify(person), 
       body:JSON.stringify(jobrole),
     })
     .then(response => response.json())
@@ -78,7 +78,7 @@ function Backbutton(){
   return (
     <form onSubmit={handleSave}>
       <section className="page">
-        <h1 className="font-manrope font-bold ml-52 mt-20 text-2xl">Employee Information</h1>
+        <h1>Employee Information</h1>
         <div className="body_container">
           <div className="container">
             <div className="fname">
@@ -193,56 +193,51 @@ function Backbutton(){
 
           {(edit === false) && (
             <>
-              <hr className="border-t-2 border-[#bdc1ca] my-4" />
+              <hr />
               <Job_role_info edit={edit} data={jobrole} job_role_data={setdata} />
-              <hr className="border-t-2 border-[#bdc1ca] my-4" />
+              <hr />
               <Dependent_info edit={edit} />
-              <hr className="border-t-2 border-[#bdc1ca] my-4" />
+              <hr />
               <Emergency_contact_info edit={edit} />
             </>
           )}
 
           {(role !== "employee" && edit === true) && (
             <>
-              <hr className="border-t-2 border-[#bdc1ca] my-4" />
+              <hr />
               <Job_role_info edit={edit} data={jobrole} job_role_data={setdata}/>
             </>
           )}
-
-          {(edit === true) && (
-            <>
-              <hr className="border-t-2 border-[#bdc1ca] my-4" />
-              <Dependent_info edit={edit} />
-              <hr className="border-t-2 border-[#bdc1ca] my-4" />
-              <Emergency_contact_info edit={edit} />
-            </>
-          )}
-
-          {role === "employee" && visible === true && (
-            <button
-            className="border border-[#a860eb] rounded p-[7px] text-[#a860eb] flex justify-center mb-[10px] ml-[880px] mt-[10px] w-[120px] cursor-pointer"
-            onClick={() => {
-              setEdit(true);
-              setVisible(false); //edit button
-            }}
-          >
-            Edit
-          </button>
+           {role === "employee" && visible === true && (
+            <button className="Editbutton" onClick={() => { setEdit(true); setVisible(false) }}>
+              Edit
+            </button>
           )}
 
           {visible === false && (
-            <div className="Button ml-[680px] flex flex-row">
-              <button className="button2 border border-[#ef120e] rounded p-[7px] text-[#ef120e] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer" onClick={() => { setEdit(false); setVisible(true) }}>Cancel</button>
-              <button className="button1 border border-[#a860eb] rounded p-[7px] text-[#a860eb] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer"type="submit" >Save</button>
+            <div className="Button">
+              <button className="button2" onClick={() => { setEdit(false); setVisible(true) }}>Cancel</button>
+              <button className="button1"type="submit" >Save</button>
             </div>
           )}
 
           {role === "HR" && visible === true && (
-            <div className="Button ml-[680px] flex flex-row">
-              <button className="button2 border border-[#ef120e] rounded p-[7px] text-[#ef120e] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer" onClick={Backbutton}>Back</button>
-              <button className="button1 border border-[#a860eb] rounded p-[7px] text-[#a860eb] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer" onClick={() => { setEdit(true); setVisible(false) }}>Edit</button>
+            <div className="Button">
+              <button className="button2" onClick={Backbutton}>Back</button>
+              <button className="button1" onClick={() => { setEdit(true); setVisible(false) }}>Edit</button>
             </div>
           )}
+
+          {(edit === true) && (
+            <>
+              <hr />
+              <Dependent_info edit={edit} />
+              <hr />
+              <Emergency_contact_info edit={edit} />
+            </>
+          )}
+
+         
         </div>
       </section>
     </form>
