@@ -53,7 +53,7 @@ const PendingLeave = () => {
   };
 
   return (
-    <div className="container mx-auto px-7 py-4 bg-ligreen">
+    <div className="container mx-auto flex flex-col px-7 py-4 bg-ligreen">
       <h2 className="text-[32px] font-normal font-lexend mb-4">Pending Leave</h2>
 
       {Object.keys(pendingLeaves).map((date) => (

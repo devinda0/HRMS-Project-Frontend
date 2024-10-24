@@ -19,17 +19,16 @@ const AppRoutes = () => {
 
   return (
     <BrowserRouter>
-        {accessToken && <Navbar />  }
+        <Navbar />
         <Routes>
             <Route path='/login'>
-                {
-                    accessToken ? <Route path='' element={<Navigate to='/' />} /> :
+                    <Route path='' element={<Navigate to='/' />} /> :
                     <Route path='' element={<Login />} />
-                }
+                
             </Route>
 
-            {
-                accessToken ?
+            {/* {
+                accessToken ? */}
                 <Route path='/'>
                     <Route path='' element={<Home />} />
                     <Route path="/login" element={<Login />} />
@@ -38,7 +37,7 @@ const AppRoutes = () => {
                 </Route>
                 :
                 <Route path='*' element={<Navigate to='/login' />} />
-            }
+            {/* } */}
 
         </Routes>
     </BrowserRouter>
