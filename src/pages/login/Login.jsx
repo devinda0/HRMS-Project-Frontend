@@ -23,7 +23,7 @@ const Login = () => {
     console.log(formData);
 
     axiosWithCredential
-      .post('/login', formData)
+      .post('/user/login', formData)
       .then((res) => {
         console.log(res);
         setAccessToken(res.data.accessToken);
@@ -33,12 +33,7 @@ const Login = () => {
         console.log(err);
       });
   };
-
-  const test2 = () => {
-    refreshToken();
-  };
-
-
+  
   return (
     <div className="flex h-screen bg-background1">
       {/* Left section for the logo and image */}
@@ -91,6 +86,7 @@ const Login = () => {
             </div>
             <button
               className="text-indigo-500 hover:text-indigo-700"
+              type='button'
               onClick={(e) => {
                 e.preventDefault(); 
                 setIsForgotPasswordOpen(true); 

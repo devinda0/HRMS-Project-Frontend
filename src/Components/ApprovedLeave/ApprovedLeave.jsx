@@ -1,8 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Leave from '../../pages/Leave/Leave';
+import useAxios from '../../hooks/useAxios';
 
 const ApprovedLeave = () => {
   const [selectedLeave, setSelectedLeave] = useState(null);
+  const [leaves, setLeaves] = useState([]);
+  const axios = useAxios();
+
+  useEffect(() => {
+    if (!axios) return;
+
+    axios.get('/absence/leaves/subordinates/approved')
+      .then(res => {
+        setLeaves(res.data.leaves);
+      }).catch(err => {
+        console.log(err);
+      });
+  }, [axios]);
 
   
   const approvedLeaves = {
@@ -53,33 +67,27 @@ const ApprovedLeave = () => {
   };
 
   return (
-    <div className="container mx-auto px-7 py-4 bg-customblue">
-      <h2 className="text-[32px] font-normal font-lexend mb-4">Approved Leave</h2>
+    <div className="container mx-auto px-7 py-4 bg-ligreen">
+      <h2 className="text-[32px] font-normal font-lexend mb-4">Approved Leaves</h2>
 
-      {Object.keys(approvedLeaves).map((date) => (
-        <div key={date} className="mb-6">
-          <div className="bg-white shadow mb-2 p-5">
-            <h3 className="text-[24px] font-bold mb-4 font-manrope">{date} {new Date(date).toLocaleDateString('en-US', { weekday: 'long' })}</h3>
-            {approvedLeaves[date].map((leave) => (
-              <div key={leave.id} className="bg-highpurple rounded-lg px-3 py-2 mb-4 flex justify-between items-center w-full">
-                <div>
-                  <p className="text-lg font-medium font-manrope">{leave.employeeName}</p>
-                  <p className="text-gray-500 font-manrope">{leave.post}</p>
-                </div>
-                <button
-                  onClick={() => handleViewDetails(leave)}
-                  className="bg-transparent border-2 border-blue-900 text-blue-900 py-1 px-4 rounded-lg hover:bg-blue-900 hover:text-white transition"
-                >
-                  View Details
-                </button>
-              </div>
-            ))}
+      {leaves.map((leave) => (
+        <div key={leave.leave_id} className="bg-highpurple rounded-lg px-3 py-2 mb-4 flex justify-between items-center w-full">
+          <div>
+            <p className="text-lg font-medium font-manrope">{`${leave.leave_type} Leave`}</p>
+            <p className="text-gray-500 font-manrope">Employee: {leave.name}</p>
+            <p className="text-gray-500 font-manrope">From: {(new Date(leave.start_date)).toISOString().split('T')[0]} To: {(new Date(leave.end_date)).toISOString().split('T')[0]}</p>
           </div>
+          <button
+            onClick={() => handleViewDetails(leave)}
+            className="bg-transparent border-2 border-blue-900 text-blue-900 py-1 px-4 rounded-lg hover:bg-blue-900 hover:text-white transition"
+          >
+            View Details
+          </button>
         </div>
       ))}
 
       {selectedLeave && (
-        <Leave leave={selectedLeave} onClose={() => setSelectedLeave(null)} isApproved={true} />
+        <Leave leave={selectedLeave} isApproved={true} onClose={() => setSelectedLeave(null)} />
       )}
     </div>
   );
