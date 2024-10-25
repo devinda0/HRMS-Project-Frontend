@@ -19,7 +19,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
         .catch((err) => {
             console.log(err);
         })
-    },[axios]);
+    },[axios,employeeData]);
     
     useEffect(() => {
         if(!axios) return;
@@ -31,7 +31,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
         .catch((err) => {
             console.log(err);
         })
-    },[axios]);
+    },[axios, employeeData]);
 
     useEffect(() => {
         if(!axios) return;
@@ -43,7 +43,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
         .catch((err) => {
             console.log(err);
         })
-    },[axios]);
+    },[axios,employeeData]);
 
     const handleChange = (e) => {
         setTempData({
@@ -67,12 +67,29 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
             birthday : getBirthday(tempData.birthday),
             marital_status : tempData.marital_status,
             supervisor : tempData.supervisor,
-            job_title_id : (jobTitles.filter((jt) => jt.job_title === tempData.job_title))[0].job_title_id,
+            job_title_id : (jobTitles.filter((jt) => jt.job_title === tempData.job_title))[0]?.job_title_id,
             pay_grade : tempData.pay_grade,
             employment_status : tempData.employment_status,
-            branch_id : (branches.filter((branch) => branch.branch_name === tempData.branch_name)[0].branch_id)
+            branch_id : (branches.filter((branch) => branch.branch_name === tempData.branch_name)[0]?.branch_id)
         }
+
+        if(!updatedData.job_title_id || !updatedData.branch_id) {
+            alert('Please fill up all fields');
+            return;
+        };
+
+        console.log(updatedData);
+
+        if( updatedData.name === '' || updatedData.email === '' || 
+            updatedData.address === '' || updatedData.birthday === '' || updatedData.marital_status === '' || 
+            updatedData.job_title_id === '' || updatedData.pay_grade === '' || 
+            updatedData.employment_status === '' || updatedData.branch_id === '') {
+                alert('Please fill up all fields');
+                return;
+            }
+
         handleEdit(updatedData);
+        setDisabled(true);
     }
 
     useEffect(() => {
@@ -84,17 +101,19 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
   return (
     <div className=' w-full flex flex-col justify-start items-center gap-5'>
     <form className=' w-full flex flex-row flex-wrap items-center justify-start gap-5' action="">
-        <div className=' flex flex-col text-[1rem] font-medium w-[15rem] flex-shrink-0 flex-1'>
-            <label htmlFor="employee_id" className=' pl-1'>Employee ID</label>
-            <input 
-                type="text" 
-                id='employee_id' 
-                className=' h-[2.5rem] px-2 bg-white border border-black rounded-md' 
-                value={tempData.employee_id}
-                onChange={handleChange}
-                disabled
-            />
-        </div>
+        {   initialDisabled &&
+            <div className=' flex flex-col text-[1rem] font-medium w-[15rem] flex-shrink-0 flex-1'>
+                <label htmlFor="employee_id" className=' pl-1'>Employee ID</label>
+                <input 
+                    type="text" 
+                    id='employee_id' 
+                    className=' h-[2.5rem] px-2 bg-white border border-black rounded-md' 
+                    value={tempData.employee_id}
+                    onChange={handleChange}
+                    disabled
+                />
+            </div>
+        }
         <div className=' flex flex-col text-[1rem] font-medium w-[15rem] flex-shrink-0 flex-1'>
             <label htmlFor="name" className=' pl-1'>Name</label>
             <input 
@@ -193,6 +212,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 onChange={handleChange}
                 disabled={disabled}
             >
+                <option value={''} disabled>Select Branch</option>
                 {
                     branches.map((branch, index) => {
                         return <option key={index} value={branch.branch_name}>{branch.branch_name}</option>
@@ -210,6 +230,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 onChange={handleChange}
                 disabled={disabled}
             >
+                <option value={''} disabled>Select Job Title</option>
                 {
                     jobTitles.map((jt, index) => {
                         return <option key={index} value={jt.job_title}>{jt.job_title}</option>
@@ -227,6 +248,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 onChange={handleChange}
                 disabled={disabled}
             >
+                <option value={''} disabled>Select Pay Grade</option>
                 {
                     payGrades.map((pg, index) => {
                         return <option key={index} value={pg.pay_grade}>{pg.pay_grade}</option>
@@ -245,17 +267,19 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 disabled={disabled}
             />
         </div>
-        <div className=' flex flex-col text-[1rem] font-medium w-[15rem] flex-shrink-0 flex-1'>
-            <label htmlFor="username" className=' pl-1'>Username</label>
-            <input 
-                type="text" 
-                id='username' 
-                className=' h-[2.5rem] px-2 bg-white border border-black rounded-md' 
-                value={tempData.username}
-                onChange={handleChange}
-                disabled
-            />
-        </div>
+        {   initialDisabled &&
+            <div className=' flex flex-col text-[1rem] font-medium w-[15rem] flex-shrink-0 flex-1'>
+                <label htmlFor="username" className=' pl-1'>Username</label>
+                <input 
+                    type="text" 
+                    id='username' 
+                    className=' h-[2.5rem] px-2 bg-white border border-black rounded-md' 
+                    value={tempData.username}
+                    onChange={handleChange}
+                    disabled
+                />
+            </div>
+        }
     </form>
     {
         editable && (
@@ -282,7 +306,6 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                         <button 
                             className='btn btn-outline border-purple-500 border-2 text-purple-500 font-semibold'
                             onClick={() => {
-                                setDisabled(true);
                                 handleSave();
                             }}
                         >

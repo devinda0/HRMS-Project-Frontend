@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useAxios from '../../hooks/useAxios';
 import Table from '../../Components/Table/EmployeeTable';
+import { useNavigate } from 'react-router-dom';
 
 const employeePerPage = 10;
 
@@ -9,6 +10,7 @@ const PIM = () => {
     const axios = useAxios();
     const [page, setPage] = useState(1);
     const [totalEmployees, setTotalEmployees] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('/pim/employees', {
@@ -40,7 +42,7 @@ const PIM = () => {
     <div className='w-full flex flex-col justify-start items-center px-[1rem] sm:px-[5rem] my-5'>
         <div className=' w-full my-4 flex flex-row items-center justify-between'>
             <h1 className=' text-[1.7rem] sm:text-[2rem]'>Employees</h1>
-            <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline'>Add New Employee</button>
+            <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={()=> navigate('add')}>Add New Employee</button>
         </div>
 
         <div className=' w-full'>
