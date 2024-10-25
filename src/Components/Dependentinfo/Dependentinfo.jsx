@@ -34,7 +34,7 @@ function Dependent_info({edit}){
     return (
         <>
         <div class="table-container">
-        <h1 className="h2 font-manrope font-bold mt-2 text-2xl mb-3">Dependant Information</h1>    
+        <h1 className="h2 font-manrope font-bold mt-2 text-2xl mb-3 ml-0">Dependant Information</h1>    
         <table>
             <thead>
                 <tr className="headers">

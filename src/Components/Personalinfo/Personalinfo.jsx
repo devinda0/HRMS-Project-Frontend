@@ -1,16 +1,18 @@
 import { useState, useContext } from "react";
-import Job_role_info from "../jobroleinfo/jobroleinfo.jsx";
+import Job_role_info from "../Jobroleinfo/Jobroleinfo.jsx";
 import Dependent_info from "../Dependentinfo/Dependentinfo.jsx";
-import { userContext } from "../PIM_view/PIM_view";
-import Emergency_contact_info from "../Emergancycontact_info/Emergencycontact_info.jsx";
-import { useNavigate } from 'react-router-dom';
+import { userContext } from "../../pages/PIMModule/Pim_module.jsx";
+import Emergency_contact_info from "../Emergancycontact_info/Emergancycontact_info.jsx";
 
-function Personalinfo() {
+import { useNavigate } from 'react-router-dom';
+import HRview from "../HRview/HRview.jsx";
+
+function Personalinfo({employee,OnBack}) {
   
   const role = useContext(userContext);
   const [edit, setEdit] = useState(false);
   const [visible, setVisible] = useState(true);
-
+  const [isSaved, setIsSaved] = useState(false);
   // State for form fields
   const [person, setPerson] = useState({
     firstname: "Dilhara",
@@ -32,11 +34,7 @@ function Personalinfo() {
   });
 
 
-function Backbutton(){
-  const navigate = useNavigate()
-  const handleBackClick = () => {
-    navigate(-1); // Goes to the previous page
-  }};
+
 
   // Handle form field changes
   const handleInputChange = (e) => {
@@ -70,19 +68,23 @@ function Backbutton(){
     .catch(error => {
       console.error('Error:', error);
     });
+    setIsSaved(true);
+
+    
+    setTimeout(() => setIsSaved(false), 3000);
   };
 
-  // Back button handler
+
   
 
   return (
     <form onSubmit={handleSave}>
-      <section className="page">
-        <h1>Employee Information</h1>
-        <div className="body_container">
-          <div className="container">
+      <section className=''>
+      <h1 className="font-manrope font-bold  mt-20 text-2xl">Employee Information</h1>
+      <div className="body_container">
+          
             <div className="fname">
-              <label htmlFor="firstName">First Name</label><br />
+              <label htmlFor="firstName">Name</label><br />
               <input
                 type="text"
                 id="firstName"
@@ -92,18 +94,8 @@ function Backbutton(){
                 readOnly={!edit}
               /><br />
             </div>
-            <div className="lname">
-              <label htmlFor="lastName">Last Name</label><br />
-              <input
-                type="text"
-                id="lastName"
-                name="lastname"
-                value={person.lastname}
-                onChange={handleInputChange}
-                readOnly={!edit}
-              />
-            </div>
-          </div>
+            
+         
 
           <div className="container">
             <div className="Gender">
@@ -154,7 +146,7 @@ function Backbutton(){
               /><br />
             </div>
             <div className="contactNumnber1">
-              <label htmlFor="contactNumnber1">Contact Number 1</label><br />
+              <label htmlFor="contactNumnber1">Contact Number </label><br />
               <input
                 type="text"
                 id="contactNumnber1"
@@ -164,20 +156,9 @@ function Backbutton(){
                 readOnly={!edit}
               />
             </div>
-            <div className="contactNumnber2">
-              <label htmlFor="contactNumnber2">Contact Number 2</label><br />
-              <input
-                type="text"
-                id="contactNumnber2"
-                name="contactnumber2"
-                value={person.contactnumber2}
-                onChange={handleInputChange}
-                readOnly={!edit}
-              />
-            </div>
+            
           </div>
-
-          <div className="container">
+         
             <div className="Address">
               <label htmlFor="Address">Address</label><br />
               <input
@@ -187,52 +168,69 @@ function Backbutton(){
                 value={person.Address}
                 onChange={handleInputChange}
                 readOnly={!edit}
-              /><br />
+              />
             </div>
-          </div>
+              <br />
+            
+          
 
           {(edit === false) && (
             <>
-              <hr />
+              <hr className="border-t-2 border-[#bdc1ca] my-4" />
               <Job_role_info edit={edit} data={jobrole} job_role_data={setdata} />
               <hr />
               <Dependent_info edit={edit} />
-              <hr />
+              <hr className="border-t-2 border-[#bdc1ca] my-4" />
               <Emergency_contact_info edit={edit} />
             </>
           )}
 
           {(role !== "employee" && edit === true) && (
             <>
-              <hr />
+              <hr className="border-t-2 border-[#bdc1ca] my-4" />
               <Job_role_info edit={edit} data={jobrole} job_role_data={setdata}/>
             </>
           )}
            {role === "employee" && visible === true && (
-            <button className="Editbutton" onClick={() => { setEdit(true); setVisible(false) }}>
+            <button className="border border-[#a860eb] rounded p-[7px] text-[#a860eb] flex justify-center mb-[10px] ml-[880px] mt-[10px] w-[120px] cursor-pointer" onClick={() => { setEdit(true); setVisible(false) }}>
               Edit
             </button>
           )}
 
           {visible === false && (
-            <div className="Button">
-              <button className="button2" onClick={() => { setEdit(false); setVisible(true) }}>Cancel</button>
-              <button className="button1"type="submit" >Save</button>
+            <div className="Button  flex flex-row">
+               <button className="button2 border border-[#ef120e] rounded p-[7px] text-[#ef120e] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer" onClick={() => { setEdit(false); setVisible(true) }}>Cancel</button>
+               <button className="button1 border border-[#a860eb] rounded p-[7px] text-[#a860eb] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer"type="submit" onClick={handleSave}>Save</button>
             </div>
           )}
+           {isSaved && (
+              <div className="relative">
+             
+             
+                <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"></div>
+              
+        
+         
+              
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white text-black px-6 py-4 rounded-lg shadow-lg">
+                  <p className="text-lg font-semibold">Changes Saved!</p>
+                </div>
+            
+              </div>
+            )}
 
-          {role === "HR" && visible === true && (
-            <div className="Button">
-              <button className="button2" onClick={Backbutton}>Back</button>
-              <button className="button1" onClick={() => { setEdit(true); setVisible(false) }}>Edit</button>
+          {(role==='HR'||role=='CEO') && visible === true && (
+            <div className="Button  flex flex-row">
+              <button className="button2 border border-[#ef120e] rounded p-[7px] text-[#ef120e] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer" onClick={OnBack}>Back</button>
+              <button className="button1 border border-[#a860eb] rounded p-[7px] text-[#a860eb] flex justify-center mb-[10px] ml-[30px]  w-[100px] cursor-pointer" onClick={() => { setEdit(true); setVisible(false) }}>Edit</button>
             </div>
           )}
 
           {(edit === true) && (
             <>
-              <hr />
+              <hr className="border-t-2 border-[#bdc1ca] my-4" />
               <Dependent_info edit={edit} />
-              <hr />
+              <hr className="border-t-2 border-[#bdc1ca] my-4" />
               <Emergency_contact_info edit={edit} />
             </>
           )}

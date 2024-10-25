@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap');
 
+h1{
+    margin-left: 10%;
+}
 body {
     background-color: rgb(237,231,246);
-    justify-content: center;
-    align-items: center;
-    /* margin-left: 250px;
-    margin-top: 150px; */
+    
     font-family: 'Manrope', sans-serif;
     
 }
@@ -13,15 +13,21 @@ body {
 .body_container {
     border: 2px solid rgb(189, 193, 202);
     background-color: rgb(237,231,246);
-    width: 1100px;
-    margin-left: 200px;
+    margin-left:10%;
+    
     margin-top: 10px;
     margin-bottom: 20px;
-    padding: 40px;
+    padding: 2%;
+    justify-content: center;
+    align-items: center;
+  
+    width: 80%;
+    
 }
 
 .container {
     display: flex;
+   
 }
 
 input {
@@ -32,7 +38,7 @@ input {
     box-shadow: none;
     outline: none;
     border-color: rgb(165, 161, 161);
-    
+    width:100%
 
 
     
@@ -42,36 +48,35 @@ label {
     font-weight: bold;
 }
 
-.fname, .lname, .Job_Title, .Employment_Status, .Branch {
-    margin-right: 50px;
+.Job_Title, .Employment_Status, .Branch,.Department {
+    margin-right: 4%;
 }
 
-.fname input, .lname input, .Branch input, .Department input {
-    width: 460px;
-}
+
 
 .Birthday, .Gender {
-    margin-right: 50px;
+    margin-right: 4%;
 }
 
-.Email, .contactNumnber1 {
-    margin-right: 45px;
+.Email{
+    margin-right:4%;
+    width:48%
+}
+.contactNumnber1{
+    width:48%
 }
 
 .Email input {
-    width: 460px;
+    width: 100%;
 }
 
-.contactNumnber1 input, .contactNumnber2 input, .Emergency_contact_Number input {
-    width: 205px;
+.contactNumnber1 input{
+    width: 100%;
 }
 
-.Address, .Emergency_contact_Number {
-    margin-right: 45px;
-}
-
-.Address input {
-    width: 975px;
+ 
+.Address input,.fname input ,.lname input{
+    width: 100%;
 }
 
 .Editbutton {
@@ -87,9 +92,11 @@ label {
     margin-top: 10px;
     width: 120px;
 }
-
-.Birthday input, .Gender input, .Martial_Status input, .Employment_Status input, .Job_Title input, .Paygrade input {
-    width: 288px;
+.Birthday , .Gender , .Martial_Status , .Employment_Status , .Job_Title , .Paygrade ,.Branch ,.Department , .Supervisor  {
+  width: 32%;
+}
+.Birthday input, .Gender input, .Martial_Status input, .Employment_Status input, .Job_Title input, .Paygrade input,.Branch input,.Department input, .Supervisor input {
+    width:100%;
 }
 
 .headers {
@@ -138,7 +145,8 @@ th, td {
 }
 
 .Button {
-    margin-left: 680px;
+    margin-left: 70%;
+    display:flex
 }
 
 .raws {
@@ -157,7 +165,7 @@ th, td {
 
 .popup-container {
     border: 10px solid rgb(240, 242, 246);
-    width: 1000px;
+    width: 80%;
     padding: 40px;
     background-color: rgb(217, 217, 217);
     backdrop-filter: blur(0px);
@@ -191,3 +199,77 @@ th, td {
 .close-btn:hover {
     color: red;
 }
+.add-employee-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Spacing between icon and text */
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #7f56d9; /* Purple text color */
+    border: 1px solid #7f56d9; /* Purple border */
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 0%;
+  }
+  .header-container {
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures items are on opposite sides */
+    margin-bottom: 16px; /* Space below the header */
+    
+    
+  }
+  .pagination {
+    display: flex;
+    justify-content: center; /* Centers the buttons horizontally */
+    align-items: center;     /* Centers items vertically if necessary */
+    margin: 20px ;          /* Adds some space above and below the pagination */
+    gap: 10px;               /* Adds spacing between the buttons */
+  }
+  .pagebtn {
+    padding: 10px 16px;
+    background-color: #ad96dd; /* Background color (can be customized) */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+  }
+  
+  .pagebtn:hover {
+    background-color: #5e3bbd; /* Darker shade on hover */
+  }
+  
+  .pagebtn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #d4bbff; /* Focus ring for accessibility */
+  }
+  
+  .pagebtn:active {
+    background-color: #482b99; /* Even darker shade when pressed */
+  }
+  .table-container1{
+    margin-left: 10%;
+    margin-right: 10%;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  .table1 {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+  @media (max-width: 768px) {
+    .body {
+      flex-direction: column; /* Stack items vertically on smaller screens */
+      padding: 10px;
+    }
+  }
+  

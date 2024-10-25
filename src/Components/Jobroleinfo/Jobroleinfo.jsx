@@ -44,6 +44,10 @@ function Job_role_info({edit,data,job_role_data}){
                <label for="Department">Department</label><br/>
                <input type="text" id="Department" name="Department" onChange={handleInputChange} value={data.Branch} readOnly={!edit}/>
                </div>
+               <div className="Supervisor">
+               <label for="Department">Supervisor</label><br/>
+               <input type="text" id="Supervisor" name="Supervisor" onChange={handleInputChange} value={data.supervisor} readOnly={!edit}/>
+               </div>
              </div>
          </div>    
              </>

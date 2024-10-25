@@ -53,7 +53,7 @@ const ApprovedLeave = () => {
   };
 
   return (
-    <div className="container mx-auto px-7 py-4 bg-customblue">
+    <div className="container mx-auto px-7 py-4 bg-customblue flex flex-col px-7 py-4 bg-ligreen">
       <h2 className="text-[32px] font-normal font-lexend mb-4">Approved Leave</h2>
 
       {Object.keys(approvedLeaves).map((date) => (

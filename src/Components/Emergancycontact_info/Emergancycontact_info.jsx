@@ -26,7 +26,7 @@ function Emergency_contact_info({edit}){
  return (
     <>
     <div class="table-container">
-    <h1 className="h2 font-manrope font-bold mt-2 text-2xl mb-3">Emergency Contact Information</h1>    
+    <h1 className="h2 font-manrope font-bold mt-2 text-2xl mb-3 ml-0">Emergency Contact Information</h1>    
     <table>
         <thead>
             <tr className="headers">
