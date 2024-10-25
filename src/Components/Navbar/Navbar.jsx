@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Menu } from '@headlessui/react';
 import { Link, useLocation } from 'react-router-dom';  
-import { AuthContext } from '../../context/AuthContext';
 import logo from '../Assets/logo.png'
 import profile from '../Assets/pofile.jpg'
 import useAuth from '../../hooks/useAuth';
@@ -9,12 +8,11 @@ import { axiosWithCredential } from '../../api/axios';
 import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
 const Navbar = () => {
-  const { role } = useContext(AuthContext);
   const location = useLocation(); 
   const isAbsentManagementPage = location.pathname === '/absent-management';
 
   const [activeLink, setActiveLink] = useState('Absent Management');
-  const {setAccessToken} = useAuth();
+  const {role, setAccessToken} = useAuth();
   const setWaitingSpinner = useWaitingSpinner();
 
   const handleLogout = () => {
@@ -63,7 +61,7 @@ const Navbar = () => {
           Absent Management
         </Link>
 
-        {role === 'CEO' && (
+        {role === 'Admin' && (
           <Link
             to="/reports"
             className={`${
