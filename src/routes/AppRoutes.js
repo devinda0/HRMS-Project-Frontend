@@ -3,13 +3,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar/Navbar';
 import Home from '../pages/home/Home';
 import Login from '../pages/login/Login';
-import PIMModule from '../pages/PIMModule/Pim_module';
 import AbsentManagement from '../pages/AbsentManagement/AbsentManagement';
 import useAuth from '../hooks/useAuth';
 import useRefreshToken from '../hooks/useRefreshToken';
 import Reports from '../pages/Reports/Reports';
 import EmployeeReport from '../pages/Reports/EmployeeReport';
 import LeaveReport from '../pages/Reports/LeaveReport';
+import PIM from '../pages/pim/PIM';
+import EmployeeDetails from '../pages/pim/EmployeeDetails';
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
@@ -39,7 +40,8 @@ const AppRoutes = () => {
                 <Route path='/'>
                     <Route path='' element={<Home />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/pim-module" element={<PIMModule />} />
+                    <Route path="/pim-module" element={<PIM />} />
+                    <Route path='/pim-module/employee/:id' element={<EmployeeDetails />} />
                     <Route path="/absent-management" element={<AbsentManagement />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/reports/employee" element={<EmployeeReport />} />
