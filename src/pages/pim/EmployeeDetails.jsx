@@ -4,7 +4,8 @@ import useAxios from '../../hooks/useAxios';
 import EmployeeDetailsForm from '../../Components/Form/EmployeeDetailsForm';
 import DependentTable from '../../Components/Table/DependentTable';
 import ContactTable from '../../Components/Table/ContactTable';
-import useModal from '../../Components/Modal/Modal';
+import Modal from '../../Components/Modal/Modal';
+import EmployeeCustomAttributeForm from '../../Components/Form/EmployeeCustomAttributeForm';
 
 const defaultEmployeeData = {
     employee_id : '',
@@ -30,8 +31,8 @@ const EmployeeDetails = () => {
     const [dependantData, setDependantData] = useState([]);
     const [contactData, setContactData] = useState([]);
     const axios = useAxios();
-    const [DependantModal, openDependantModal, closeDependantModal] = useModal();
-    const [ContactModal, openContactModal, closeContactModal] = useModal();
+    const [showDependantModal, setShowDependantModal] = useState(false);
+    const [showContactModal, setShowContactModal] = useState(false);
     const dependantNameRef = useRef(null);
     const dependantBirthdayRef = useRef(null);
     const dependantGenderRef = useRef(null);
@@ -39,6 +40,7 @@ const EmployeeDetails = () => {
     const contactNameRef = useRef(null);
     const contactNoRef = useRef(null);
     const contactRelationRef = useRef(null);
+    const [attributeData, setAttributeData] = useState([]);
 
     useEffect(() => {
         axios.get(`/pim/employees/${id}`)
@@ -46,8 +48,24 @@ const EmployeeDetails = () => {
             setEmployeeData({...employeeData, ...res.data});
         })
         .catch(err => {
-            console.log(err);
+            alert('Error fetching employee data');
         })
+    },[axios, id, employeeData]);
+
+    useEffect(() => {
+        if(!axios) return;
+
+        axios.get(`/pim/employees/${id}/custom-attributes`)
+        .then(res => {
+            let data = {};
+            res.data.forEach(attribute => {
+                data[attribute.attribute_name] = attribute.value;
+            });
+            setAttributeData(data);
+        })
+        .catch(err => {
+            alert('Error fetching employee custom attributes');
+        });
     },[axios, id]);
     
     useEffect(() => {
@@ -56,7 +74,7 @@ const EmployeeDetails = () => {
             setDependantData(res.data);
         })
         .catch(err => {
-            console.log(err);
+            alert('Error fetching dependants');
         })
     },[axios, id]);
     
@@ -74,11 +92,19 @@ const EmployeeDetails = () => {
         axios.put(`/pim/employees/`, formData)
         .then(res => {
             alert('Employee updated successfully');
-            console.log(res.data);
         })
         .catch(err => {
             alert('Error updating employee');
-            console.log(err);
+        });
+    }
+
+    const handleCustomAttributeEdit = (formData) => {
+        axios.put(`/pim/employees/${id}/custom-attributes`, formData)
+        .then(res => {
+            alert('Custom attribute updated successfully');
+        })
+        .catch(err => {
+            alert('Error updating custom attribute');
         });
     }
 
@@ -86,11 +112,9 @@ const EmployeeDetails = () => {
         axios.put(`/pim/dependants/`, formData)
         .then(res => {
             alert('Dependant updated successfully');
-            console.log(res.data);
         })
         .catch(err => {
             alert('Error updating dependant');
-            console.log(err);
         });
     }
 
@@ -98,11 +122,9 @@ const EmployeeDetails = () => {
         axios.delete(`/pim/dependants/${formData.dependant_id}`)
         .then((res) => {
             alert('Dependant deleted successfully');
-            console.log(res.data);
         })
         .catch((err) => {
             alert('Error deleting dependant');
-            console.log(err);
         });
     }
 
@@ -111,11 +133,9 @@ const EmployeeDetails = () => {
         axios.put(`/pim/emergency-contacts`, formData)
         .then((res) => {
             alert('Contact updated successfully');
-            console.log(res.data);
         })
         .catch((err) => {
             alert('Error updating contact');
-            console.log(err);
         })
         console.log(formData);
     }
@@ -124,11 +144,9 @@ const EmployeeDetails = () => {
         axios.delete(`/pim/emergency-contacts/${formData.employee_id}/${formData.contact_no}`)
         .then((res) => {
             alert('Contact deleted successfully');
-            console.log(res.data);
         })
         .catch((err) => {
             alert('Error deleting contact');
-            console.log(err);
         });
     }
 
@@ -151,15 +169,13 @@ const EmployeeDetails = () => {
         })
         .then(res => {
             alert('Dependant added successfully');
-            console.log(res.data);
             setDependantData([...dependantData, newDependant]);
         })
         .catch(err => {
             alert('Error adding dependant');
-            console.log(err);
         })
         .finally(() => {
-            closeDependantModal();
+            setShowDependantModal(false);
         });
     }
 
@@ -181,15 +197,13 @@ const EmployeeDetails = () => {
         })
         .then(res => {
             alert('Contact added successfully');
-            console.log(res.data);
             setContactData([...contactData, newContact]);
         })
         .catch(err => {
             alert('Error adding contact');
-            console.log(err);
         })
         .finally(() => {
-            closeContactModal();
+            setShowContactModal(false);
         });
 
     }
@@ -203,9 +217,17 @@ const EmployeeDetails = () => {
 
             <div className=' divider' />
 
+            <div className=' w-full flex flex-row justify-start items-center mb-2'>
+                <h1 className=' text-[1.5rem] my-3'>Custom attributes</h1>
+            </div>
+
+            <EmployeeCustomAttributeForm attributeData={attributeData} editable={true} handleEdit={handleCustomAttributeEdit} />
+
+            <div className=' divider' />
+
             <div className=' w-full flex flex-row justify-between items-center mb-2'>
                 <h1 className=' text-[1.5rem] my-3'>Dependants</h1>
-                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => openDependantModal()}>Add Dependant</button>
+                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowDependantModal(true)}>Add Dependant</button>
             </div>
 
             <DependentTable tableData={dependantData} handleDelete={handleDependantDelete} handleEdit={handleDependantEdit} />
@@ -214,12 +236,12 @@ const EmployeeDetails = () => {
 
             <div className=' w-full flex flex-row justify-between items-center mb-2'>
                 <h1 className=' text-[1.5rem] my-3'>Contact Information</h1>
-                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={openContactModal}>Add Contact</button>
+                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowContactModal(true)}>Add Contact</button>
             </div>
 
             <ContactTable tableData={contactData} handleDelete={handleContactDelete} handleEdit={handleContactEdit} />
 
-            <DependantModal className={` bg-white rounded-xl py-[2rem] px-[1rem]`}>
+            <Modal isVisible={showDependantModal} className={` bg-white rounded-xl py-[2rem] px-[1rem]`}>
                 <div className=' w-full flex flex-col justify-start items-center gap-5'>
                     <h1 className=' text-[2rem]'>Add Dependant</h1>
                     <form method='dialog' className=' text-[1.2rem] px-10 w-full flex flex-col items-center justify-start gap-4' onClick={(e) => e.preventDefault()}>
@@ -261,14 +283,14 @@ const EmployeeDetails = () => {
                         </div>
                         <div className=' w-full flex flex-row items-center justify-center gap-5'>
                             <button className=' btn btn-outline' onClick={handleAddNewDependant}>ADD</button>
-                            <button className=' btn btn-outline' onClick={closeDependantModal}>Cancel</button>
+                            <button className=' btn btn-outline' onClick={() => setShowDependantModal(false)}>Cancel</button>
                         </div>
 
                     </form>
                 </div>
-            </DependantModal>
+            </Modal>
 
-            <ContactModal className={`bg-white rounded-xl py-[2rem] px-[1rem]`} >
+            <Modal isVisible={showContactModal} className={`bg-white rounded-xl py-[2rem] px-[1rem]`} >
             <div className=' w-full flex flex-col justify-start items-center gap-5'>
                     <h1 className=' text-[2rem]'>Add Emergency Contact</h1>
                     <form method='dialog' className=' text-[1.2rem] px-10 w-full flex flex-col items-center justify-start gap-4' onClick={(e) => e.preventDefault()}>
@@ -301,12 +323,12 @@ const EmployeeDetails = () => {
                         </div>
                         <div className=' w-full flex flex-row items-center justify-center gap-5'>
                             <button className=' btn btn-outline' onClick={handleAddNewContact}>ADD</button>
-                            <button className=' btn btn-outline' onClick={closeContactModal}>Cancel</button>
+                            <button className=' btn btn-outline' onClick={() => setShowContactModal(false)}>Cancel</button>
                         </div>
 
                     </form>
                 </div>
-            </ContactModal>
+            </Modal>
         </div>
 
         

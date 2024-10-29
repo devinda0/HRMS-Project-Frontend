@@ -19,7 +19,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
         .catch((err) => {
             console.log(err);
         })
-    },[axios,employeeData]);
+    },[axios]);
     
     useEffect(() => {
         if(!axios) return;
