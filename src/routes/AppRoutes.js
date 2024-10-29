@@ -13,6 +13,7 @@ import PIM from '../pages/pim/PIM';
 import EmployeeDetails from '../pages/pim/EmployeeDetails';
 import AddNewEmployee from '../pages/pim/AddNewEmployee';
 import Footer from '../Components/Footer/Footer';
+import Employees from '../pages/pim/Employees';
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
@@ -43,7 +44,8 @@ const AppRoutes = () => {
                     <Route path='' element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/pim-module" element={<PIM />} />
-                    <Route path="/pim-module/add" element={<AddNewEmployee />} />
+                    <Route path="/pim-module/employee/add" element={<AddNewEmployee />} />
+                    <Route path="/pim-module/employee" element={<Employees />} />
                     <Route path='/pim-module/employee/:id' element={<EmployeeDetails />} />
                     <Route path="/absent-management" element={<AbsentManagement />} />
                     <Route path="/reports" element={<Reports />} />
