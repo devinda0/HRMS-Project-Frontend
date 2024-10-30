@@ -5,21 +5,23 @@ import logo from '../Assets/logo.png'
 import profile from '../Assets/pofile.jpg'
 import useAuth from '../../hooks/useAuth';
 import { axiosWithCredential } from '../../api/axios';
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
 const Navbar = () => {
   const location = useLocation(); 
   const isAbsentManagementPage = location.pathname === '/absent-management';
-
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
   const {role, setAccessToken} = useAuth();
 
   const handleLogout = () => {
-
+    addWaiter('navbar');
     axiosWithCredential.post('/user/logout')
       .then(() => {
         setAccessToken(null);
       }).catch((err) => {
         console.log(err);
       }).finally(() => {
+        removeWaiter('navbar');
       });
   };
 

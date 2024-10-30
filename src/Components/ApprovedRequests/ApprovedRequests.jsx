@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import useAxios from '../../hooks/useAxios';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const ApprovedRequests = () => {
   const [requests, setRequests] = useState([]);
   const axios = useAxios();
-
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
   useEffect(()  => {
     if(!axios) return;
-    
+    addWaiter('approvedreq');
     axios.get('/absence/leaves/approved')
       .then(res => {
         setRequests(res.data.leaves);
       }).catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('approvedreq');
       });
+
   },[axios]);
 
   return (

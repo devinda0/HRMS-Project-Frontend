@@ -28,6 +28,7 @@ const AddNewEmployee = () => {
 
     const handleEmployeeDetailsEdit = (formData) => {
         console.log(formData);
+        addWaiter('addemployee');
         axios.post(`/pim/employees`, formData)
         .then(res => {
             alert('Employee added successfully');
@@ -36,7 +37,10 @@ const AddNewEmployee = () => {
         .catch(err => {
             alert('Error adding employee');
             console.log(err);
-        });
+        })
+        .finally(() => {
+            removeWaiter('addemployee');
+          });
     }
 
   return (

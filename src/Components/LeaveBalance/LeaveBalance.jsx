@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import useAxios from '../../hooks/useAxios';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const LeaveBalance = () => {
   const [leaveCount, setLeaveCount] = useState({});
   const [totalLeaveCount, setTotalLeaveCount] = useState({});
-
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
   const axios = useAxios();
 
   useEffect(() => {
     if (!axios) return;
-
+    addWaiter('leavebalance');
     axios.get('/absence/leave_count')
       .then(res => {
         setLeaveCount(res.data.leaveCount);
         setTotalLeaveCount(res.data.totalLeaveCount);
       }).catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('leavebalance');
       });
   }, [axios]);
 

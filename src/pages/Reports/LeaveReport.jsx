@@ -3,21 +3,21 @@ import useAxios from '../../hooks/useAxios';
 import Table from '../../Components/ReportTable/Table';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const LeaveReport = () => {
     const [filterBy, setFilterBy] = useState('');
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
     const [tableData, setTableData] = useState([]);
     const axios = useAxios();
-
+    const { addWaiter, removeWaiter } = useWaitingSpinner();
     const getTableData = (filterBy, fromDate, toDate) => {
         if(!axios) return;
-
+        
         if(!fromDate || !toDate) return;
 
         if(filterBy === '') return;
-
+        addWaiter('leavereport');
         axios.get('/report/leave_count', {
             params: {
                 filterBy: filterBy,
@@ -30,7 +30,10 @@ const LeaveReport = () => {
         })
         .catch(err => {
             console.log(err);
-        });
+        })
+        .finally(() => {
+            removeWaiter('leavereport');
+          });
     }
 
   return (

@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import Leave from '../../pages/Leave/Leave';
 import useAxios from '../../hooks/useAxios';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const ApprovedLeave = () => {
   const [selectedLeave, setSelectedLeave] = useState(null);
   const [leaves, setLeaves] = useState([]);
   const axios = useAxios();
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
 
   useEffect(() => {
     if (!axios) return;
-
+    addWaiter('approvedleave');
     axios.get('/absence/leaves/subordinates/approved')
       .then(res => {
         setLeaves(res.data.leaves);
       }).catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('approvedleave');
       });
   }, [axios]);
 

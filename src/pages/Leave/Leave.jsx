@@ -1,18 +1,21 @@
 import React from 'react';
 import useAxios from '../../hooks/useAxios';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const Leave = ({ leave, onClose, isApproved }) => {
   const axios = useAxios();
-  
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
   const handleApprove = () => {
     if (!axios) return;
-
+    addWaiter('leave');
     axios.put(`/absence/leave/approve/${leave.leave_id}`)
       .then(res => {
         console.log(res.data);
         alert(`Approved leave for ${leave.name}`);
       }).catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('leave');
       });
     
     onClose();
@@ -20,12 +23,15 @@ const Leave = ({ leave, onClose, isApproved }) => {
 
   const handleDecline = () => {
     if (!axios) return;
-
+    addWaiter('decline');
     axios.put(`/absence/leave/decline/${leave.leave_id}`)
       .then(res => {
         console.log(res.data);
       }).catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('decline');
       });
     
     alert(`Declined leave for ${leave.name}`);
