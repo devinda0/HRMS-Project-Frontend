@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState,useContext } from 'react'
 import useAxios from '../../hooks/useAxios';
 import EmployeeDetailsForm from '../../Components/Form/EmployeeDetailsForm';
 import DependentTable from '../../Components/Table/DependentTable';
@@ -6,6 +6,7 @@ import ContactTable from '../../Components/Table/ContactTable';
 import Modal from '../../Components/Modal/Modal';
 import EmployeeCustomAttributeForm from '../../Components/Form/EmployeeCustomAttributeForm';
 import ProfileDetailsForm from '../../Components/Form/ProfileDetailsForm';
+import { AuthContext } from '../../context/AuthContext'; 
 
 const Profile = () => {
     const [employeeData, setEmployeeData] = useState({});
@@ -22,6 +23,7 @@ const Profile = () => {
     const contactNoRef = useRef(null);
     const contactRelationRef = useRef(null);
     const [attributeData, setAttributeData] = useState({});
+    const { role } = useContext(AuthContext);
 
     useEffect(() => {
         axios.get(`/user`)
@@ -193,7 +195,7 @@ const Profile = () => {
         <h1 className=' text-[2rem] text-center'>Profile</h1>
 
         <div className=' w-full flex flex-col border border-black rounded px-4 py-10'>
-            <ProfileDetailsForm  employeeData={employeeData} editable={true} handleEdit={handleEmployeeDetailsEdit}/>
+            <ProfileDetailsForm  employeeData={employeeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl1'} handleEdit={handleEmployeeDetailsEdit}/>
 
             <div className=' divider' />
 
@@ -201,13 +203,15 @@ const Profile = () => {
                 <h1 className=' text-[1.5rem] my-3'>Custom attributes</h1>
             </div>
 
-            <EmployeeCustomAttributeForm attributeData={attributeData} editable={true} handleEdit={handleCustomAttributeEdit} />
+            <EmployeeCustomAttributeForm attributeData={attributeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl1'} handleEdit={handleCustomAttributeEdit} />
 
             <div className=' divider' />
 
             <div className=' w-full flex flex-row justify-between items-center mb-2'>
                 <h1 className=' text-[1.5rem] my-3'>Dependants</h1>
-                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowDependantModal(true)}>Add Dependant</button>
+                {(role === 'Admin' || role === 'Manager') && (
+                    <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowDependantModal(true)}>Add Dependant</button>
+                )}
             </div>
 
             <DependentTable tableData={dependantData} handleDelete={handleDependantDelete} handleEdit={handleDependantEdit} />
@@ -216,7 +220,9 @@ const Profile = () => {
 
             <div className=' w-full flex flex-row justify-between items-center mb-2'>
                 <h1 className=' text-[1.5rem] my-3'>Contact Information</h1>
-                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowContactModal(true)}>Add Contact</button>
+                {(role === 'Admin' || role === 'Manager') && (
+                    <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowContactModal(true)}>Add Contact</button>
+                )}
             </div>
 
             <ContactTable tableData={contactData} handleDelete={handleContactDelete} handleEdit={handleContactEdit} />
