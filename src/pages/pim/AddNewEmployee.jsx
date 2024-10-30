@@ -26,6 +26,7 @@ const AddNewEmployee = () => {
     const axios = useAxios();
     const navigate = useNavigate();
     const { addWaiter, removeWaiter } = useWaitingSpinner();
+    
     const handleEmployeeDetailsEdit = (formData) => {
         console.log(formData);
         addWaiter('addemployee');

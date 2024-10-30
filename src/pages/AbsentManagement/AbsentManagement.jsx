@@ -18,6 +18,8 @@ const AbsentManagement = () => {
   const [isSupervisor, setIsSupervisor] = useState(false);
   const axios = useAxios();
   const { addWaiter, removeWaiter } = useWaitingSpinner();
+  const [employee, setEmployee] = useState({});
+
   const handleViewDetails = (leave) => {
     setSelectedLeave(leave);
     setLeavePopupOpen(true);
@@ -27,6 +29,22 @@ const AbsentManagement = () => {
     setLeavePopupOpen(false);
     setSelectedLeave(null);
   };
+
+  useEffect(() => {
+    if(!axios) return;
+    addWaiter('get employee in absent management');
+
+    axios.get('/user')
+    .then(res => {
+      setEmployee(res.data);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+    .finally(() => {
+      removeWaiter('get employee in absent management');
+    });
+  },[axios]);
 
   useEffect(() => {
     if(!axios) return;
@@ -57,7 +75,7 @@ const AbsentManagement = () => {
                 />
               </div>
               <div className='basis-4/5 items-center ml-4 mt-1'>
-                <h1 className="text-3xl font-bold mb-3 font-lexend">Emily Anderson</h1>
+                <h1 className="text-3xl font-bold mb-3 font-lexend">{employee.name}</h1>
                 {
                   isSupervisor && <ModeToggleButton />
                 }

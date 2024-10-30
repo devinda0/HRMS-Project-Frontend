@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu } from '@headlessui/react';
 import { Link, useLocation } from 'react-router-dom';  
 import logo from '../Assets/logo.png'
@@ -6,12 +6,26 @@ import profile from '../Assets/pofile.jpg'
 import useAuth from '../../hooks/useAuth';
 import { axiosWithCredential } from '../../api/axios';
 import useWaitingSpinner from '../../hooks/useWaitingSpinner';
+import useAxios from '../../hooks/useAxios';
 
 const Navbar = () => {
   const location = useLocation(); 
   const isAbsentManagementPage = location.pathname === '/absent-management';
   const { addWaiter, removeWaiter } = useWaitingSpinner();
   const {role, setAccessToken} = useAuth();
+  const [employee, setEmployee] = useState({});
+  const axios = useAxios();
+
+  useEffect(() => {
+    if(!axios) return;
+
+    axios.get('/user')
+      .then((res) => {
+        setEmployee(res.data);
+      }).catch((err) => {
+        console.log(err);
+      });
+  }, [axios]);
 
   const handleLogout = () => {
     addWaiter('navbar');
@@ -86,8 +100,8 @@ const Navbar = () => {
 
         <Menu.Items className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md">
           <div className="p-4 border-b">
-            <p className="text-sm font-bold">Lisa Anderson</p>
-            <p className="text-sm text-gray-500">Senior Accountant</p>
+            <p className="text-sm font-bold">{employee.name}</p>
+            <p className="text-sm text-gray-500">{employee.job_title}</p>
           </div>
           <Menu.Item>
             {({ active }) => (

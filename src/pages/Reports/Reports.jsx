@@ -17,7 +17,7 @@ export const Reports = () => {
           </div>
           <div className="bg-[#D9D9D9] p-2 mt-3">
             <p className="text-black font-manrope text-[1rem]">
-              Displays employee details categorized by departments for easy reference and management.
+              Displays employee details categorizing for easy reference and management.
             </p>
           </div>
         </Link>
@@ -31,7 +31,7 @@ export const Reports = () => {
           </div>
           <div className="bg-[#D9D9D9] p-2 mt-3">
             <p className="text-black font-manrope text-[1rem]">
-              Shows total leaves taken within a selected period, grouped by department.
+              Shows total leaves taken within a selected period.
             </p>
           </div>
         </Link>
