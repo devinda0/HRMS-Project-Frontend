@@ -14,6 +14,9 @@ import EmployeeDetails from '../pages/pim/EmployeeDetails';
 import AddNewEmployee from '../pages/pim/AddNewEmployee';
 import Footer from '../Components/Footer/Footer';
 import Employees from '../pages/pim/Employees';
+import Privacy from '../Components/Privacy/Privacy';
+import Terms from '../Components/Terms/Terms'
+import Problem from '../Components/ReportProblem/ReportProblem'
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
@@ -51,6 +54,9 @@ const AppRoutes = () => {
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/reports/employee" element={<EmployeeReport />} />
                     <Route path="/reports/leave" element={<LeaveReport />} />
+                    <Route path="/privacy" element={<Privacy/>}/>
+                    <Route path="/terms" element={<Terms/>}/>
+                    <Route path="/problem" element={<Problem/>}/>
                 </Route>
                 :
                 <Route path='*' element={<Navigate to='/login' />} />
@@ -65,4 +71,4 @@ const AppRoutes = () => {
   )
 }
 
-export default AppRoutes
+export default AppRoutes              
