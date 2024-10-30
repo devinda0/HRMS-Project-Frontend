@@ -43,19 +43,21 @@ const Navbar = () => {
           Home
         </Link>
 
-        <Link
-          to="/pim-module"
-          className={`${
-            location.pathname === '/pim-module' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600'
-          } font-medium font-manrope transition-colors`}
-        >
-          PIM Module
-        </Link>
+        {(role==='Manager'|| role==='Admin') && (
+          <Link
+            to="/pim-module"
+            className={`${
+              location.pathname === '/pim-module' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600'
+            } font-medium font-manrope transition-colors`}
+          >
+            PIM Module
+          </Link>
+        )}
 
         <Link
           to="/absent-management"
           className={`${
-            isAbsentManagementPage ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600'
+            location.pathname === '/absent-management' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-600'
           } font-medium font-manrope transition-colors`}
         >
           Absent Management
@@ -77,7 +79,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-2 ">
         <div className="flex items-center justify-center border border-black bg-white rounded-md px-3 py-1">
           <span className="text-sm font-medium font-poppins">
-            {isAbsentManagementPage ? 'Employee Mode' : role}
+            {isAbsentManagementPage ? role : role}
           </span>
         </div>
         <Menu as="div" className="relative inline-block ">
