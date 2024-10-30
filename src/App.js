@@ -1,18 +1,18 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/home/Home';
 import AuthProvider from './context/AuthContext';
-import Login from './pages/login/Login';
-
+import { ModeProvider } from './context/ModeContext';  
+import WaitingProvider from './context/WaitingContext';
+import AppRoutes from './routes/AppRoutes';
 
 function App() {
+
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-        </Routes>
-      </BrowserRouter>
+      <WaitingProvider>
+        <ModeProvider>  
+          <AppRoutes />
+        </ModeProvider>
+      </WaitingProvider>
     </AuthProvider>
   );
 }
