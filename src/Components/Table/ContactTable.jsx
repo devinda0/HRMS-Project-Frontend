@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaRegEdit } from 'react-icons/fa'
 import { FiSave } from 'react-icons/fi';
 import { MdDeleteForever } from 'react-icons/md';
-import { AuthContext } from '../../context/AuthContext';
+import useAuth from '../../hooks/useAuth';
 
 const TableRows = ({data, handleEdit, handleDelete}) => {
     const [disabled, setDisabled] = useState(true);
     const [tempData, setTempData] = useState(data);
-    const { role } = useContext(AuthContext);
+    const { role } = useAuth();
 
     useEffect(() => {
         if(!!!data) return;
@@ -53,7 +53,7 @@ const TableRows = ({data, handleEdit, handleDelete}) => {
                     disabled={disabled} 
                 />
             </td>
-            {(role === 'Admin' || role === 'Manager'|| role === 'Employee_lvl1') && (
+            {(role === 'Admin' || role === 'Manager'|| role === 'Employee_lvl2') && (
             <>
                 <th>
                     {
@@ -75,6 +75,7 @@ const TableRows = ({data, handleEdit, handleDelete}) => {
 }
 
 const ContactTable = ({className, tableData, handleEdit, handleDelete}) => {
+    const { role } = useAuth();
 
   return (
     <div className={`overflow-x-auto bg-purple-200 ${className}`}>
@@ -85,8 +86,12 @@ const ContactTable = ({className, tableData, handleEdit, handleDelete}) => {
                 <th>Name</th>
                 <th>Contact No</th>
                 <th>Relation</th>
-                <th></th>
-                <th></th>
+                {(role === 'Admin' || role === 'Manager'|| role === 'Employee_lvl2') && (
+                    <>
+                        <th></th>
+                        <th></th>
+                    </>
+                )}
             </tr>
             </thead>
             <tbody>
