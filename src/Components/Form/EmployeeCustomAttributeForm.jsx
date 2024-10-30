@@ -3,7 +3,7 @@ import useAxios from '../../hooks/useAxios';
 
 const EmployeeCustomAttributeForm = ({attributeData, editable, handleEdit}) => {
     const [disabled, setDisabled] = useState(true);
-    const [tempData, setTempData] = useState(attributeData);
+    const [tempData, setTempData] = useState({...attributeData});
     const [attributes, setAttributes] = useState([]);
     const axios = useAxios();
 
@@ -12,13 +12,21 @@ const EmployeeCustomAttributeForm = ({attributeData, editable, handleEdit}) => {
 
         axios.get('/pim/custom-attributes')
         .then(res => {
+            res.data.forEach(attribute => {
+                setTempData(pre => {
+                    return {
+                        ...pre,
+                        [attribute.attribute_name]: attributeData[attribute.attribute_name] || ''
+                    }
+                });
+            });
             setAttributes(res.data);
         })
         .catch(err => {
             console.log(err);
             alert('Error fetching custom attributes');
         });
-    },[axios]);
+    },[axios, attributeData]);
 
     useEffect(() => {
         if(!!!attributeData) return;

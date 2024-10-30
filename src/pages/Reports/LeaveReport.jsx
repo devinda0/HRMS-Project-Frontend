@@ -34,7 +34,7 @@ const LeaveReport = () => {
     }
 
   return (
-    <div className=' w-full bg-custompurple px-[1.5rem] md:px-[2rem] lg:px-[5rem] py-7'>
+    <div className=' w-full flex-1 bg-custompurple px-[1.5rem] md:px-[2rem] lg:px-[5rem] py-7'>
         <h1 className='text-black text-[2.5rem] text-center'>Employee Report</h1>
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>

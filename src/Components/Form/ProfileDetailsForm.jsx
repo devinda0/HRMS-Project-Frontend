@@ -20,7 +20,7 @@ const defaultEmployeeData = {
     username : ''
 }
 
-const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initialDisabled = true}) => {
+const ProfileDetailsForm = ({employeeData, editable = false, handleEdit, initialDisabled = true}) => {
     const [tempData, setTempData] = useState({...defaultEmployeeData});
     const [disabled, setDisabled] = useState(initialDisabled);
     const [jobTitles, setJobTitles] = useState([]);
@@ -224,7 +224,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 className=' h-[2.5rem] px-2 bg-white border border-black rounded-md' 
                 value={tempData.employment_status}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled
             />
         </div>
         <div className=' flex flex-col text-[1rem] font-medium w-[15rem] flex-shrink-0 flex-1'>
@@ -235,7 +235,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 id="branch_name" 
                 value={tempData.branch_name}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled
             >
                 <option value={''} disabled>Select Branch</option>
                 {
@@ -253,7 +253,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 id="job_title" 
                 value={tempData.job_title}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled
             >
                 <option value={''} disabled>Select Job Title</option>
                 {
@@ -271,7 +271,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 id="pay_grade" 
                 value={tempData.pay_grade}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled
             >
                 <option value={''} disabled>Select Pay Grade</option>
                 {
@@ -289,7 +289,7 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
                 className=' h-[2.5rem] px-2 bg-white border border-black rounded-md' 
                 value={tempData.supervisor}
                 onChange={handleChange}
-                disabled={disabled}
+                disabled
             />
         </div>
         {   initialDisabled &&
@@ -347,4 +347,4 @@ const EmployeeDetailsForm = ({employeeData, editable = false, handleEdit, initia
   )
 }
 
-export default EmployeeDetailsForm
+export default ProfileDetailsForm;

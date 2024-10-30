@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom';
 import useAxios from '../../hooks/useAxios';
 import EmployeeDetailsForm from '../../Components/Form/EmployeeDetailsForm';
 import DependentTable from '../../Components/Table/DependentTable';
 import ContactTable from '../../Components/Table/ContactTable';
 import Modal from '../../Components/Modal/Modal';
 import EmployeeCustomAttributeForm from '../../Components/Form/EmployeeCustomAttributeForm';
+import ProfileDetailsForm from '../../Components/Form/ProfileDetailsForm';
 
-const EmployeeDetails = () => {
-    const { id } = useParams();
+const Profile = () => {
     const [employeeData, setEmployeeData] = useState({});
     const [dependantData, setDependantData] = useState([]);
     const [contactData, setContactData] = useState([]);
@@ -25,19 +24,19 @@ const EmployeeDetails = () => {
     const [attributeData, setAttributeData] = useState({});
 
     useEffect(() => {
-        axios.get(`/pim/employees/${id}`)
+        axios.get(`/user`)
         .then(res => {
             setEmployeeData(res.data);
         })
         .catch(err => {
             alert('Error fetching employee data');
         })
-    },[axios, id]);
+    },[axios]);
 
     useEffect(() => {
         if(!axios) return;
 
-        axios.get(`/pim/employees/${id}/custom-attributes`)
+        axios.get(`/user/custom-attributes`)
         .then(res => {
             let data = {};
             res.data.forEach(attribute => {
@@ -48,30 +47,30 @@ const EmployeeDetails = () => {
         .catch(err => {
             alert('Error fetching employee custom attributes');
         });
-    },[axios, id]);
+    },[axios]);
     
     useEffect(() => {
-        axios.get(`/pim/employees/${id}/dependants`)
+        axios.get(`/user/dependants`)
         .then(res => {
             setDependantData(res.data);
         })
         .catch(err => {
             alert('Error fetching dependants');
         })
-    },[axios, id]);
+    },[axios]);
     
     useEffect(() => {
-        axios.get(`/pim/employees/${id}/emergency-contacts`)
+        axios.get(`/user/emergency-contacts`)
         .then(res => {
             setContactData(res.data);
         })
         .catch(err => {
             console.log(err);
         })
-    },[axios, id]);
+    },[axios]);
 
     const handleEmployeeDetailsEdit = (formData) => {
-        axios.put(`/pim/employees/`, formData)
+        axios.put(`/user`, formData)
         .then(res => {
             alert('Employee updated successfully');
         })
@@ -81,7 +80,7 @@ const EmployeeDetails = () => {
     }
 
     const handleCustomAttributeEdit = (formData) => {
-        axios.put(`/pim/employees/${id}/custom-attributes`, formData)
+        axios.put(`/user/custom-attributes`, formData)
         .then(res => {
             alert('Custom attribute updated successfully');
         })
@@ -91,7 +90,7 @@ const EmployeeDetails = () => {
     }
 
     const handleDependantEdit = (formData) => {
-        axios.put(`/pim/dependants/`, formData)
+        axios.put(`/user/dependants`, formData)
         .then(res => {
             alert('Dependant updated successfully');
         })
@@ -101,7 +100,7 @@ const EmployeeDetails = () => {
     }
 
     const handleDependantDelete = (formData) => {
-        axios.delete(`/pim/dependants/${formData.dependant_id}`)
+        axios.delete(`/user/dependants/${formData.dependant_id}`)
         .then((res) => {
             alert('Dependant deleted successfully');
         })
@@ -112,7 +111,7 @@ const EmployeeDetails = () => {
 
     const handleContactEdit = (oldData, newData) => {
         const formData = {oldData, newData};
-        axios.put(`/pim/emergency-contacts`, formData)
+        axios.put(`/user/emergency-contacts`, formData)
         .then((res) => {
             alert('Contact updated successfully');
         })
@@ -123,9 +122,10 @@ const EmployeeDetails = () => {
     }
 
     const handleContactDelete = (formData) => {
-        axios.delete(`/pim/emergency-contacts/${formData.employee_id}/${formData.contact_no}`)
+        axios.delete(`/user/emergency-contacts/${formData.contact_no}`)
         .then((res) => {
             alert('Contact deleted successfully');
+            contactData.filter(contact => contact.contact_no !== formData.contact_no);
         })
         .catch((err) => {
             alert('Error deleting contact');
@@ -145,9 +145,8 @@ const EmployeeDetails = () => {
             return ;
         }
 
-        axios.post(`/pim/dependants`, {
-            ...newDependant,
-            employee_id : id
+        axios.post(`/user/dependants`, {
+            ...newDependant
         })
         .then(res => {
             alert('Dependant added successfully');
@@ -173,9 +172,8 @@ const EmployeeDetails = () => {
             return ;
         }
 
-        axios.post(`/pim/emergency-contacts`, {
-            ...newContact,
-            employee_id : id
+        axios.post(`/user/emergency-contacts`, {
+            ...newContact
         })
         .then(res => {
             alert('Contact added successfully');
@@ -192,10 +190,10 @@ const EmployeeDetails = () => {
 
   return (
     <div className=' w-full flex-1 flex flex-col gap-3 px-[5rem] py-7'>
-        <h1 className=' text-[2rem]'>Employee Information</h1>
+        <h1 className=' text-[2rem] text-center'>Profile</h1>
 
         <div className=' w-full flex flex-col border border-black rounded px-4 py-10'>
-            <EmployeeDetailsForm  employeeData={employeeData} editable={true} handleEdit={handleEmployeeDetailsEdit}/>
+            <ProfileDetailsForm  employeeData={employeeData} editable={true} handleEdit={handleEmployeeDetailsEdit}/>
 
             <div className=' divider' />
 
@@ -318,4 +316,4 @@ const EmployeeDetails = () => {
   )
 }
 
-export default EmployeeDetails
+export default Profile

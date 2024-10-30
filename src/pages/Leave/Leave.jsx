@@ -33,7 +33,7 @@ const Leave = ({ leave, onClose, isApproved }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-10">
+    <div className="fixed flex-1 inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-10">
       <div className='bg-white flex flex-col items-center justify-center w-1/2 h-screen p-4 relative rounded-xl'>
         <h1 className="text-[24px] font-bold font-manrope mb-4">Leave Details</h1>
         <div className="bg-ash p-6 rounded w-4/5 shadow-lg">

@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { axiosWithCredential } from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
-import useRefreshToken from '../../hooks/useRefreshToken';
 import Hrm from '../../Components/Assets/HRM 1.png';
 import ReportProblem from '../../Components/ReportProblem/ReportProblem'; 
 import ForgotPassword from '../../Components/FogetPW/FogetPW'; 
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
 const Login = () => {
   const [formData, setFormData] = React.useState({ username: '', password: '' });
   const [isReportOpen, setIsReportOpen] = useState(false); 
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false); 
-  const { setAccessToken, setRole } = useAuth();
-  const refreshToken = useRefreshToken();
-  
+  const { setAccessToken } = useAuth();
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,22 +19,24 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    addWaiter('login');
 
     axiosWithCredential
       .post('/user/login', formData)
       .then((res) => {
-        console.log(res);
         setAccessToken(res.data.accessToken);
-        setRole(res.data.role);
       })
       .catch((err) => {
+        alert('Invalid credentials');
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('login');
       });
   };
   
   return (
-    <div className="flex h-screen bg-background1">
+    <div className="flex flex-1 h-screen bg-background1">
       {/* Left section for the logo and image */}
       <div className="flex-1 bg-background1 flex items-center justify-center">
         <div className="text-center">

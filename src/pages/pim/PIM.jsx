@@ -26,8 +26,17 @@ export const PIM = () => {
     }
 
     useEffect(() => {
-        getCustomAttributes();
-    },[getCustomAttributes]);
+      if(!axios) return;
+
+      axios.get('/pim/custom-attributes')
+      .then(res => {
+          setCustomAttributes(res.data);
+      })
+      .catch(err => {
+          console.log(err);
+          alert('Error fetching custom attributes');
+      });
+    }, [axios]);
 
     const handleAttributeDelete = (attribute) => {
         if(!axios) return;
@@ -61,7 +70,7 @@ export const PIM = () => {
     }
 
   return (
-    <div className=' w-full bg-custompurple px-[10rem] py-7'>
+    <div className=' w-full flex-1 bg-custompurple px-[10rem] py-7'>
       <h1 className='text-black text-[2.5rem] text-center font-bold p-5'>Personal Information Managment</h1>
       <div className=' w-full flex flex-col justify-start items-center gap-4 mt-7 '>
         <Link 
