@@ -5,16 +5,16 @@ import Modal from '../../Components/Modal/Modal';
 import useAxios from '../../hooks/useAxios';
 import { MdDeleteForever } from 'react-icons/md';
 import { IoMdAdd } from 'react-icons/io';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 export const PIM = () => {
     const [showCustomAttributeModal, setShowCustomAttributeModal] = useState(false);
     const [customAttributes, setCustomAttributes] = useState(['attribute1', 'attribute2', 'attribute3']);
     const [newAttribute, setNewAttribute] = useState('');
     const axios = useAxios();
-
+    const { addWaiter, removeWaiter } = useWaitingSpinner();
     const getCustomAttributes = () => {
         if(!axios) return;
-
+        addWaiter('PIM');
         axios.get('/pim/custom-attributes')
         .then(res => {
             setCustomAttributes(res.data);
@@ -22,12 +22,15 @@ export const PIM = () => {
         .catch(err => {
             console.log(err);
             alert('Error fetching custom attributes');
+        })
+        .finally(() => {
+          removeWaiter('PIM');
         });
     }
 
     useEffect(() => {
       if(!axios) return;
-
+      addWaiter('PIM');
       axios.get('/pim/custom-attributes')
       .then(res => {
           setCustomAttributes(res.data);
@@ -35,12 +38,15 @@ export const PIM = () => {
       .catch(err => {
           console.log(err);
           alert('Error fetching custom attributes');
+      })
+      .finally(() => {
+        removeWaiter('PIM');
       });
     }, [axios]);
 
     const handleAttributeDelete = (attribute) => {
         if(!axios) return;
-
+        addWaiter('PIM');
         axios.delete(`/pim/custom-attributes/${attribute.attribute_id}`)
         .then(res => {
             alert('Attribute deleted');
@@ -49,12 +55,15 @@ export const PIM = () => {
         .catch(err => {
             const errMsg = err.response.data?.message || 'Error deleting attribute';
             alert(errMsg);
+        })
+        .finally(() => {
+          removeWaiter('PIM');
         });
     }
 
     const handleAddNewAttribute = () => {
         if(!axios) return;
-
+        addWaiter('PIM');
         axios.post('/pim/custom-attributes', {
             attribute_name : newAttribute
         })
@@ -66,6 +75,9 @@ export const PIM = () => {
         .catch(err => {
             const errMsg = err.response.data?.message || 'Error adding attribute';
             alert(errMsg);
+        })
+        .finally(() => {
+          removeWaiter('PIM');
         });
     }
 

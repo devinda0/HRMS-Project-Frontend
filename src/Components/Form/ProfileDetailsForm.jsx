@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useAxios from '../../hooks/useAxios';
 import useAuth from '../../hooks/useAuth';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const defaultEmployeeData = {
     employee_id : '',
     name : '',
@@ -27,7 +27,7 @@ const ProfileDetailsForm = ({employeeData, editable = false, handleEdit, initial
     const [branches, setBranches] = useState([]);
     const [payGrades, setPayGrades] = useState([]);
     const axios = useAxios();
-
+    const { addWaiter, removeWaiter } = useWaitingSpinner();
     useEffect(() => {
         let temp = {};
         Object.keys(employeeData).forEach((key) => {
@@ -40,7 +40,7 @@ const ProfileDetailsForm = ({employeeData, editable = false, handleEdit, initial
 
     useEffect(() => {
         if(!axios) return;
-
+        addWaiter('profiledeatails');
         axios.get('/pim/branches')
         .then((res) => {
             setBranches(res.data);
@@ -48,11 +48,14 @@ const ProfileDetailsForm = ({employeeData, editable = false, handleEdit, initial
         .catch((err) => {
             console.log(err);
         })
+        .finally(() => {
+            removeWaiter('profiledeatails');
+          });
     },[axios]);
     
     useEffect(() => {
         if(!axios) return;
-
+        addWaiter('profiledeatails');
         axios.get('/pim/job-titles')
         .then((res) => {
             setJobTitles(res.data);
@@ -60,11 +63,14 @@ const ProfileDetailsForm = ({employeeData, editable = false, handleEdit, initial
         .catch((err) => {
             console.log(err);
         })
+        .finally(() => {
+            removeWaiter('profiledeatails');
+          });
     },[axios]);
 
     useEffect(() => {
         if(!axios) return;
-
+        addWaiter('profiledeatails');
         axios.get('/pim/pay-grades')
         .then((res) => {
             setPayGrades(res.data);
@@ -72,6 +78,9 @@ const ProfileDetailsForm = ({employeeData, editable = false, handleEdit, initial
         .catch((err) => {
             console.log(err);
         })
+        .finally(() => {
+            removeWaiter('profiledeatails');
+          });
     },[axios]);
 
     const handleChange = (e) => {

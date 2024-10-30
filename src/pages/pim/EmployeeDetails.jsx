@@ -8,6 +8,7 @@ import Modal from '../../Components/Modal/Modal';
 import EmployeeCustomAttributeForm from '../../Components/Form/EmployeeCustomAttributeForm';
 import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
+
 const EmployeeDetails = () => {
     const { id } = useParams();
     const [employeeData, setEmployeeData] = useState({});
@@ -30,6 +31,7 @@ const EmployeeDetails = () => {
     const {addWaiter, removeWaiter} = useWaitingSpinner();
 
     useEffect(() => {
+        addWaiter('login');
         axios.get(`/pim/employees/${id}`)
         .then(res => {
             setEmployeeData(res.data);
@@ -37,11 +39,14 @@ const EmployeeDetails = () => {
         .catch(err => {
             alert('Error fetching employee data');
         })
+        .finally(() => {
+            removeWaiter('login');
+          });
     },[axios, id]);
-
+   
     useEffect(() => {
         if(!axios) return;
-
+        addWaiter('login');
         axios.get(`/pim/employees/${id}/custom-attributes`)
         .then(res => {
             let data = {};
@@ -52,10 +57,14 @@ const EmployeeDetails = () => {
         })
         .catch(err => {
             alert('Error fetching employee custom attributes');
-        });
+        })
+        .finally(() => {
+            removeWaiter('login');
+          });
     },[axios, id]);
     
     useEffect(() => {
+        addWaiter('login');
         axios.get(`/pim/employees/${id}/dependants`)
         .then(res => {
             setDependantData(res.data);
@@ -63,9 +72,13 @@ const EmployeeDetails = () => {
         .catch(err => {
             alert('Error fetching dependants');
         })
+        .finally(() => {
+            removeWaiter('login');
+          });
     },[axios, id]);
     
     useEffect(() => {
+        addWaiter('login');
         axios.get(`/pim/employees/${id}/emergency-contacts`)
         .then(res => {
             setContactData(res.data);
@@ -73,50 +86,71 @@ const EmployeeDetails = () => {
         .catch(err => {
             console.log(err);
         })
+        .finally(() => {
+            removeWaiter('login');
+          });
     },[axios, id]);
 
     const handleEmployeeDetailsEdit = (formData) => {
+        addWaiter('login');
         axios.put(`/pim/employees/`, formData)
         .then(res => {
             alert('Employee updated successfully');
         })
         .catch(err => {
             alert('Error updating employee');
-        });
+        })
+        .finally(() => {
+            removeWaiter('login');
+          });
     }
 
     const handleCustomAttributeEdit = (formData) => {
+        addWaiter('login');
         axios.put(`/pim/employees/${id}/custom-attributes`, formData)
         .then(res => {
             alert('Custom attribute updated successfully');
         })
         .catch(err => {
             alert('Error updating custom attribute');
-        });
+        })
+        .finally(() => {
+            removeWaiter('login');
+          });
     }
 
     const handleDependantEdit = (formData) => {
+        addWaiter('login');
         axios.put(`/pim/dependants/`, formData)
         .then(res => {
             alert('Dependant updated successfully');
         })
         .catch(err => {
             alert('Error updating dependant');
-        });
+        })
+        .finally(() => {
+            removeWaiter('login');
+          });
     }
 
     const handleDependantDelete = (formData) => {
+        addWaiter('login');
         axios.delete(`/pim/dependants/${formData.dependant_id}`)
         .then((res) => {
             alert('Dependant deleted successfully');
         })
         .catch((err) => {
             alert('Error deleting dependant');
-        });
+        })
+        .finally(() => {
+            removeWaiter('login');
+          });
     }
 
     const handleContactEdit = (oldData, newData) => {
+        
         const formData = {oldData, newData};
+        addWaiter('login');
         axios.put(`/pim/emergency-contacts`, formData)
         .then((res) => {
             alert('Contact updated successfully');
@@ -124,17 +158,24 @@ const EmployeeDetails = () => {
         .catch((err) => {
             alert('Error updating contact');
         })
+        .finally(() => {
+            removeWaiter('login');
+          });
         console.log(formData);
     }
 
     const handleContactDelete = (formData) => {
+        addWaiter('login');
         axios.delete(`/pim/emergency-contacts/${formData.employee_id}/${formData.contact_no}`)
         .then((res) => {
             alert('Contact deleted successfully');
         })
         .catch((err) => {
             alert('Error deleting contact');
-        });
+        })
+        .finally(() => {
+            removeWaiter('login');
+          });
     }
 
     const handleAddNewDependant = () => {
@@ -149,7 +190,7 @@ const EmployeeDetails = () => {
             alert();
             return ;
         }
-
+        addWaiter('login'); 
         axios.post(`/pim/dependants`, {
             ...newDependant,
             employee_id : id
@@ -163,6 +204,7 @@ const EmployeeDetails = () => {
         })
         .finally(() => {
             setShowDependantModal(false);
+            removeWaiter('login');
         });
     }
 
@@ -177,7 +219,7 @@ const EmployeeDetails = () => {
             alert('Please fill in all fields');
             return ;
         }
-
+        addWaiter('login');
         axios.post(`/pim/emergency-contacts`, {
             ...newContact,
             employee_id : id
@@ -191,6 +233,7 @@ const EmployeeDetails = () => {
         })
         .finally(() => {
             setShowContactModal(false);
+            removeWaiter('login');
         });
 
     }

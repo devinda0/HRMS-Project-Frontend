@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useAxios from '../../hooks/useAxios';
 import Table from '../../Components/Table/EmployeeTable';
 import { useNavigate } from 'react-router-dom';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const employeePerPage = 10;
 
 const Employees = () => {
@@ -11,10 +11,10 @@ const Employees = () => {
     const [page, setPage] = useState(1);
     const [totalEmployees, setTotalEmployees] = useState(0);
     const navigate = useNavigate();
-
+    const { addWaiter, removeWaiter } = useWaitingSpinner();
     useEffect(() => {
         if(!axios) return;
-        
+        addWaiter('employees');
         axios.get('/pim/employees', {
             params : {
                 position : (page - 1) * employeePerPage,
@@ -27,11 +27,14 @@ const Employees = () => {
         .catch(err => {
             console.log(err);
         })
+        .finally(() => {
+            removeWaiter('employees');
+          });
     }, [page, axios]);
 
     useEffect(() => {
         if(!axios) return;
-
+        addWaiter('employee');
         axios.get('/pim/employees/count')
         .then(res => {
             setTotalEmployees(res.data);
@@ -39,6 +42,9 @@ const Employees = () => {
         .catch(err => {
             console.log(err);
         })
+        .finally(() => {
+            removeWaiter('employee');
+          });
     }, [axios]);
 
 

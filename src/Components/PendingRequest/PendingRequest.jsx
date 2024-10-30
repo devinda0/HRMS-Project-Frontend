@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import useAxios from '../../hooks/useAxios';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const PendingRequests = () => {
   
   const [requests, setRequests] = useState([]);
   const axios = useAxios();
-
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
   useEffect(()  => {
     if(!axios) return;
-    
+    addWaiter('pendingrequest');
     axios.get('/absence/leaves/pending')
       .then(res => {
         setRequests(res.data.leaves);
       }).catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('pendingrequest');
       });
   },[axios]);
 
   const handleCancel = (id) => {
     if(!axios) return;
-
+    addWaiter('cancel');
     axios.put(`/absence/leave/cancel/${id}`)
       .then(res => {
         console.log(res.data);
@@ -27,7 +30,11 @@ const PendingRequests = () => {
         setRequests(updatedRequests);
       }).catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        removeWaiter('cancel');
       });
+
   };
 
   return (

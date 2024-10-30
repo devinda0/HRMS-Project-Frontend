@@ -10,14 +10,14 @@ import PendingLeave from '../../Components/PendingLeave/PendingLeave';
 import ApprovedLeaves from '../../Components/ApprovedLeave/ApprovedLeave';
 import Leave from '../Leave/Leave'; 
 import useAxios from '../../hooks/useAxios';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const AbsentManagement = () => {
   const { isEmployeeMode } = useContext(ModeContext); 
   const [isLeavePopupOpen, setLeavePopupOpen] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState(null);
   const [isSupervisor, setIsSupervisor] = useState(false);
   const axios = useAxios();
-
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
   const handleViewDetails = (leave) => {
     setSelectedLeave(leave);
     setLeavePopupOpen(true);
@@ -30,13 +30,16 @@ const AbsentManagement = () => {
 
   useEffect(() => {
     if(!axios) return;
-
+    addWaiter('AbsentManagement');
     axios.get('/absence/is_supervisor')
     .then(res => {
       setIsSupervisor(res.data);
     })
     .catch(err => {
       console.log(err);
+    })
+    .finally(() => {
+      removeWaiter('AbsentManagement');
     });
   },[axios]);
 

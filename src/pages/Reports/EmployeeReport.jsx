@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useAxios from '../../hooks/useAxios';
 import Table from '../../Components/ReportTable/Table';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const EmployeeReport = () => {
     const [filterBy, setFilterBy] = useState('');
     const [filterValue, setFilterValue] = useState({});
@@ -9,17 +9,20 @@ const EmployeeReport = () => {
     const [selectedFilterValue, setSelectedFilterValue] = useState('');
     const [tableData, setTableData] = useState([]);
     const axios = useAxios();
-
+    const { addWaiter, removeWaiter } = useWaitingSpinner();
     useEffect(() => {
         if(!axios) return;
-
+        addWaiter('employeereport');
         axios.get('/report/filter_by_values')
         .then(res => {
             setFilterValue(res.data);
         })
         .catch(err => {
             console.log(err);
-        });
+        })
+        .finally(() => {
+            removeWaiter('employeereport');
+          });
     },[axios]);
 
     useEffect(() => {
@@ -46,7 +49,7 @@ const EmployeeReport = () => {
 
     const getTableData = (filterBy, filterValue) => {
         if(!axios) return;
-
+        addWaiter('employeereport');
         axios.get('/report/employees', {
             params: {
                 filterBy: filterBy,
@@ -58,7 +61,10 @@ const EmployeeReport = () => {
         })
         .catch(err => {
             console.log(err);
-        });
+        })
+        .finally(() => {
+            removeWaiter('employeereport');
+          });
     }
 
   return (

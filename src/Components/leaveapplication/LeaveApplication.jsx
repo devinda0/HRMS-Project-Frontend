@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'; 
 import useAxios from '../../hooks/useAxios';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const LeaveApplication = () => {
   const [leaveType, setLeaveType] = useState('');
   const [fromDate, setFromDate] = useState(null);
@@ -10,12 +10,12 @@ const LeaveApplication = () => {
   const [reason, setReason] = useState('');
   // const [attachments, setAttachments] = useState([]);
   const axios = useAxios();
-
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if(!axios) return;
-
+    addWaiter('leaveapplication');
     axios.post('/absence/leave', {
       leave_type : leaveType,
       start_date : (new Date(fromDate)).toISOString().split('T')[0],
@@ -25,6 +25,9 @@ const LeaveApplication = () => {
       console.log(res.data);
     }).catch(err => {
       console.log(err);
+    })
+    .finally(() => {
+      removeWaiter('leaveapplication');
     });
   };
 
