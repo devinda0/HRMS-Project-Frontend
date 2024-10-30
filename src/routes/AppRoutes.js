@@ -14,18 +14,22 @@ import EmployeeDetails from '../pages/pim/EmployeeDetails';
 import AddNewEmployee from '../pages/pim/AddNewEmployee';
 import Footer from '../Components/Footer/Footer';
 import Employees from '../pages/pim/Employees';
+import Profile from '../pages/profile/Profile';
+import useWaitingSpinner from '../hooks/useWaitingSpinner';
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
     const refreshToken = useRefreshToken();
+    const {removeWaiter} = useWaitingSpinner();
+
 
     useEffect(() => {
-        if(!refreshToken) return;
-
         refreshToken();
-
     }, [refreshToken]);
 
+    useEffect(() => {
+        removeWaiter('initial loading')
+    }, [removeWaiter]);
 
   return (
     <BrowserRouter>
@@ -37,20 +41,25 @@ const AppRoutes = () => {
                     <Route path='' element={<Login />} />
                 }
             </Route>
-
             {
                 accessToken ?
                 <Route path='/'>
                     <Route path='' element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/pim-module" element={<PIM />} />
-                    <Route path="/pim-module/employee/add" element={<AddNewEmployee />} />
-                    <Route path="/pim-module/employee" element={<Employees />} />
-                    <Route path='/pim-module/employee/:id' element={<EmployeeDetails />} />
+                    <Route path="pim-module" >
+                        <Route path="" element={<PIM />} />
+                        <Route path='employee'>
+                            <Route path='' element={<Employees />} />
+                            <Route path=':id' element={<EmployeeDetails />} />
+                            <Route path='add' element={<AddNewEmployee />} />
+                        </Route>
+                    </Route>
                     <Route path="/absent-management" element={<AbsentManagement />} />
-                    <Route path="/reports" element={<Reports />} />
-                    <Route path="/reports/employee" element={<EmployeeReport />} />
-                    <Route path="/reports/leave" element={<LeaveReport />} />
+                    <Route path='/reports' >
+                        <Route path="" element={<Reports />} />
+                        <Route path="employee" element={<EmployeeReport />} />
+                        <Route path="leave" element={<LeaveReport />} />
+                    </Route>
+                    <Route path='profile' element={<Profile />} />
                 </Route>
                 :
                 <Route path='*' element={<Navigate to='/login' />} />

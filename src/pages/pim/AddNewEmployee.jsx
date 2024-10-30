@@ -40,7 +40,7 @@ const AddNewEmployee = () => {
     }
 
   return (
-    <div className=' w-full flex flex-col gap-3 px-[5rem] py-7'>
+    <div className=' w-full flex-1 flex flex-col gap-3 px-[5rem] py-7'>
         <h1 className=' text-[2rem]'>Employee Information</h1>
 
         <div className=' w-full flex flex-col border border-black rounded px-4 py-10'>

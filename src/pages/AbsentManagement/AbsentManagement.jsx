@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ModeContext } from '../../context/ModeContext';
 import LeaveApplication from '../../Components/leaveapplication/LeaveApplication';
 import ModeToggleButton from '../../Components/ModeButton/ModeButton'; 
@@ -9,27 +9,40 @@ import ApprovedRequests from '../../Components/ApprovedRequests/ApprovedRequests
 import PendingLeave from '../../Components/PendingLeave/PendingLeave';
 import ApprovedLeaves from '../../Components/ApprovedLeave/ApprovedLeave';
 import Leave from '../Leave/Leave'; 
+import useAxios from '../../hooks/useAxios';
+
 const AbsentManagement = () => {
   const { isEmployeeMode } = useContext(ModeContext); 
-
-  
   const [isLeavePopupOpen, setLeavePopupOpen] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState(null);
+  const [isSupervisor, setIsSupervisor] = useState(false);
+  const axios = useAxios();
 
-  
   const handleViewDetails = (leave) => {
     setSelectedLeave(leave);
     setLeavePopupOpen(true);
   };
-
   
   const closePopup = () => {
     setLeavePopupOpen(false);
     setSelectedLeave(null);
   };
 
+  useEffect(() => {
+    if(!axios) return;
+
+    axios.get('/absence/is_supervisor')
+    .then(res => {
+      console.log(res.data);
+      setIsSupervisor(res.data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  },[axios]);
+
   return (
-    <div className='bg-custompurple'>
+    <div className='bg-custompurple flex-1'>
       {isEmployeeMode ? (
         <div className="flex space-x-2">
           <div className="flex-1 pl-20 pt-20 pr-4 bg-custompurple rounded-lg justify-center">
@@ -43,7 +56,9 @@ const AbsentManagement = () => {
               </div>
               <div className='basis-4/5 items-center ml-4 mt-1'>
                 <h1 className="text-3xl font-bold mb-3 font-lexend">Emily Anderson</h1>
-                <ModeToggleButton />
+                {
+                  <ModeToggleButton />
+                }
               </div>
             </div>
             <div>    
@@ -69,7 +84,9 @@ const AbsentManagement = () => {
               </div>
               <div className='basis-4/5 items-center ml-4 mt-1'>
                 <h1 className="text-3xl font-bold mb-3 font-lexend">Emily Anderson</h1>
-                <ModeToggleButton />
+                {
+                  isSupervisor && <ModeToggleButton />
+                }
               </div>
             </div>
             <div>    

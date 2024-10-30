@@ -1,10 +1,11 @@
+import { useCallback } from "react";
 import { axiosWithCredential } from "../api/axios"
 import useAuth from "./useAuth"
 
 const useRefreshToken = () => {
     const { setAccessToken } = useAuth();
 
-    const refreshToken = () => {
+    const refreshToken = useCallback(() => {
         let accessToken;
 
         axiosWithCredential.post('/user/refresh_token')
@@ -18,7 +19,8 @@ const useRefreshToken = () => {
             })
         
         return accessToken;
-    }
+    },[setAccessToken])
+    
     return refreshToken;
 }
 

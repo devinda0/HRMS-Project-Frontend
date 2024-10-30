@@ -1,22 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import { Menu } from '@headlessui/react';
 import { Link, useLocation } from 'react-router-dom';  
 import logo from '../Assets/logo.png'
 import profile from '../Assets/pofile.jpg'
 import useAuth from '../../hooks/useAuth';
 import { axiosWithCredential } from '../../api/axios';
-import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
 const Navbar = () => {
   const location = useLocation(); 
   const isAbsentManagementPage = location.pathname === '/absent-management';
 
-  const [activeLink, setActiveLink] = useState('Absent Management');
   const {role, setAccessToken} = useAuth();
-  const setWaitingSpinner = useWaitingSpinner();
 
   const handleLogout = () => {
-    setWaitingSpinner(true);
 
     axiosWithCredential.post('/user/logout')
       .then(() => {
@@ -24,7 +20,6 @@ const Navbar = () => {
       }).catch((err) => {
         console.log(err);
       }).finally(() => {
-        setWaitingSpinner(false);
       });
   };
 
@@ -94,13 +89,6 @@ const Navbar = () => {
             {({ active }) => (
               <Link to="/profile" className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100' : ''}`}>
                 Profile
-              </Link>
-            )}
-          </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <Link to="/settings" className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100' : ''}`}>
-                Settings
               </Link>
             )}
           </Menu.Item>
