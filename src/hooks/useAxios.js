@@ -1,7 +1,7 @@
 import useAuth  from './useAuth';
 import { useEffect } from 'react';
-import axios from 'axios';
 import useRefreshToken from './useRefreshToken';
+import axiosInstance from '../api/axios';
 
 
 const useAxios = () => {
@@ -9,17 +9,10 @@ const useAxios = () => {
     const {accessToken} = useAuth();
     const refreshToken = useRefreshToken();
 
-    const axiosInstance = axios.create({
-        baseURL: process.env.REACT_APP_API_URL,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-
     useEffect(() => {
         axiosInstance.interceptors.request.use(
             (config) => {
-                if(config.headers['Authorization']){
+                if(!config.headers['Authorization']){
                     config.headers['Authorization'] = `Bearer ${accessToken}`;
                 }
                 return config;
@@ -29,7 +22,7 @@ const useAxios = () => {
             }
         );
 
-    },[accessToken])
+    },[accessToken]);
 
 
     useEffect(() => {
@@ -50,7 +43,7 @@ const useAxios = () => {
                 return Promise.reject(error);
             }
         );
-    },[])
+    },[accessToken, refreshToken]);
     
     
     
