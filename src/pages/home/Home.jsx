@@ -77,7 +77,7 @@ const Home = () => {
           </div>
         </Link>
 
-        {role === 'CEO' && (
+        {(role === 'Admin'|| role === 'Manager') && (
           <Link to="/ceo-dashboard" className="block w-full lg:h-44">
             <div className="bg-white p-6 rounded-lg border-[2px] border-transparent hover:border-[#723BE9] shadow-xl lg:h-44 transition-shadow duration-300">
               <div className="flex items-center justify-center mb-6">

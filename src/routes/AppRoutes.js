@@ -14,8 +14,12 @@ import EmployeeDetails from '../pages/pim/EmployeeDetails';
 import AddNewEmployee from '../pages/pim/AddNewEmployee';
 import Footer from '../Components/Footer/Footer';
 import Employees from '../pages/pim/Employees';
+import Privacy from '../Components/Privacy/Privacy';
+import Terms from '../Components/Terms/Terms'
+import Problem from '../Components/ReportProblem/ReportProblem'
 import Profile from '../pages/profile/Profile';
 import useWaitingSpinner from '../hooks/useWaitingSpinner';
+
 
 const AppRoutes = () => {
     const {accessToken} = useAuth();
@@ -54,6 +58,9 @@ const AppRoutes = () => {
                         </Route>
                     </Route>
                     <Route path="/absent-management" element={<AbsentManagement />} />
+                    <Route path="/privacy" element={<Privacy/>}/>
+                    <Route path="/terms" element={<Terms/>}/>
+                    <Route path="/problem" element={<Problem/>}/>
                     <Route path='/reports' >
                         <Route path="" element={<Reports />} />
                         <Route path="employee" element={<EmployeeReport />} />
@@ -74,4 +81,4 @@ const AppRoutes = () => {
   )
 }
 
-export default AppRoutes
+export default AppRoutes              
