@@ -28,7 +28,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-custompurple items-center flex flex-col">
+    <div className="min-h-screen flex-1 bg-custompurple items-center flex flex-col">
       {/* Header Section */}
       <div className="bg-white w-10/12 items-center justify-center py-4 px-10 mt-8"> 
         <div className="items-center">

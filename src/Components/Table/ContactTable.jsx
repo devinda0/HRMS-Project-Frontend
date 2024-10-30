@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { FaRegEdit } from 'react-icons/fa'
 import { FiSave } from 'react-icons/fi';
 import { MdDeleteForever } from 'react-icons/md';
+import { AuthContext } from '../../context/AuthContext';
 
 const TableRows = ({data, handleEdit, handleDelete}) => {
     const [disabled, setDisabled] = useState(true);
     const [tempData, setTempData] = useState(data);
+    const { role } = useContext(AuthContext);
 
     useEffect(() => {
         if(!!!data) return;
@@ -51,19 +53,23 @@ const TableRows = ({data, handleEdit, handleDelete}) => {
                     disabled={disabled} 
                 />
             </td>
-            <th>
-                {
-                    disabled ? 
-                    <FaRegEdit className=' scale-[1.75]' onClick={() => setDisabled(false)} /> : 
-                    <FiSave className=' scale-[1.75]' onClick={() => {
-                        handleEdit(data, tempData);
-                        setDisabled(true);
-                    }} /> 
-                }
-            </th>
-            <th>
-                <MdDeleteForever className=' scale-[1.75]' onClick={() => handleDelete(data)} />
-            </th>
+            {(role === 'Admin' || role === 'Manager'|| role === 'Employee_lvl1') && (
+            <>
+                <th>
+                    {
+                        disabled ? 
+                        <FaRegEdit className=' scale-[1.75]' onClick={() => setDisabled(false)} /> : 
+                        <FiSave className=' scale-[1.75]' onClick={() => {
+                            handleEdit(data, tempData);
+                            setDisabled(true);
+                        }} /> 
+                    }
+                </th>
+                <th>
+                    <MdDeleteForever className=' scale-[1.75]' onClick={() => handleDelete(data)} />
+                </th>
+            </>
+            )}
         </tr>
     )
 }

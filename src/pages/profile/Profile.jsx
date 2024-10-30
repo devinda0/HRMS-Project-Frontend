@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState,useContext } from 'react'
 import useAxios from '../../hooks/useAxios';
 import EmployeeDetailsForm from '../../Components/Form/EmployeeDetailsForm';
 import DependentTable from '../../Components/Table/DependentTable';
 import ContactTable from '../../Components/Table/ContactTable';
 import Modal from '../../Components/Modal/Modal';
 import EmployeeCustomAttributeForm from '../../Components/Form/EmployeeCustomAttributeForm';
-import useWaitingSpinner from '../../hooks/useWaitingSpinner';
+import ProfileDetailsForm from '../../Components/Form/ProfileDetailsForm';
+import { AuthContext } from '../../context/AuthContext'; 
 
-const EmployeeDetails = () => {
-    const { id } = useParams();
+const Profile = () => {
     const [employeeData, setEmployeeData] = useState({});
     const [dependantData, setDependantData] = useState([]);
     const [contactData, setContactData] = useState([]);
@@ -24,25 +23,22 @@ const EmployeeDetails = () => {
     const contactNoRef = useRef(null);
     const contactRelationRef = useRef(null);
     const [attributeData, setAttributeData] = useState({});
-    const [showCreateUserModal, setShowCreateUserModal] = useState(false);
-    const usernameRef = useRef(null);
-    const userRoleRef = useRef(null);
-    const {addWaiter, removeWaiter} = useWaitingSpinner();
+    const { role } = useContext(AuthContext);
 
     useEffect(() => {
-        axios.get(`/pim/employees/${id}`)
+        axios.get(`/user`)
         .then(res => {
             setEmployeeData(res.data);
         })
         .catch(err => {
             alert('Error fetching employee data');
         })
-    },[axios, id]);
+    },[axios]);
 
     useEffect(() => {
         if(!axios) return;
 
-        axios.get(`/pim/employees/${id}/custom-attributes`)
+        axios.get(`/user/custom-attributes`)
         .then(res => {
             let data = {};
             res.data.forEach(attribute => {
@@ -53,30 +49,30 @@ const EmployeeDetails = () => {
         .catch(err => {
             alert('Error fetching employee custom attributes');
         });
-    },[axios, id]);
+    },[axios]);
     
     useEffect(() => {
-        axios.get(`/pim/employees/${id}/dependants`)
+        axios.get(`/user/dependants`)
         .then(res => {
             setDependantData(res.data);
         })
         .catch(err => {
             alert('Error fetching dependants');
         })
-    },[axios, id]);
+    },[axios]);
     
     useEffect(() => {
-        axios.get(`/pim/employees/${id}/emergency-contacts`)
+        axios.get(`/user/emergency-contacts`)
         .then(res => {
             setContactData(res.data);
         })
         .catch(err => {
             console.log(err);
         })
-    },[axios, id]);
+    },[axios]);
 
     const handleEmployeeDetailsEdit = (formData) => {
-        axios.put(`/pim/employees/`, formData)
+        axios.put(`/user`, formData)
         .then(res => {
             alert('Employee updated successfully');
         })
@@ -86,7 +82,7 @@ const EmployeeDetails = () => {
     }
 
     const handleCustomAttributeEdit = (formData) => {
-        axios.put(`/pim/employees/${id}/custom-attributes`, formData)
+        axios.put(`/user/custom-attributes`, formData)
         .then(res => {
             alert('Custom attribute updated successfully');
         })
@@ -96,7 +92,7 @@ const EmployeeDetails = () => {
     }
 
     const handleDependantEdit = (formData) => {
-        axios.put(`/pim/dependants/`, formData)
+        axios.put(`/user/dependants`, formData)
         .then(res => {
             alert('Dependant updated successfully');
         })
@@ -106,7 +102,7 @@ const EmployeeDetails = () => {
     }
 
     const handleDependantDelete = (formData) => {
-        axios.delete(`/pim/dependants/${formData.dependant_id}`)
+        axios.delete(`/user/dependants/${formData.dependant_id}`)
         .then((res) => {
             alert('Dependant deleted successfully');
         })
@@ -117,7 +113,7 @@ const EmployeeDetails = () => {
 
     const handleContactEdit = (oldData, newData) => {
         const formData = {oldData, newData};
-        axios.put(`/pim/emergency-contacts`, formData)
+        axios.put(`/user/emergency-contacts`, formData)
         .then((res) => {
             alert('Contact updated successfully');
         })
@@ -128,9 +124,10 @@ const EmployeeDetails = () => {
     }
 
     const handleContactDelete = (formData) => {
-        axios.delete(`/pim/emergency-contacts/${formData.employee_id}/${formData.contact_no}`)
+        axios.delete(`/user/emergency-contacts/${formData.contact_no}`)
         .then((res) => {
             alert('Contact deleted successfully');
+            contactData.filter(contact => contact.contact_no !== formData.contact_no);
         })
         .catch((err) => {
             alert('Error deleting contact');
@@ -150,9 +147,8 @@ const EmployeeDetails = () => {
             return ;
         }
 
-        axios.post(`/pim/dependants`, {
-            ...newDependant,
-            employee_id : id
+        axios.post(`/user/dependants`, {
+            ...newDependant
         })
         .then(res => {
             alert('Dependant added successfully');
@@ -178,9 +174,8 @@ const EmployeeDetails = () => {
             return ;
         }
 
-        axios.post(`/pim/emergency-contacts`, {
-            ...newContact,
-            employee_id : id
+        axios.post(`/user/emergency-contacts`, {
+            ...newContact
         })
         .then(res => {
             alert('Contact added successfully');
@@ -195,51 +190,12 @@ const EmployeeDetails = () => {
 
     }
 
-    const handleCreateUser = () => {
-        const newUser = {
-            username : usernameRef.current?.value,
-            role : userRoleRef.current?.value,
-            employee_id : id
-        }
-
-        if(!newUser.username || !newUser.role){
-            alert('Please fill in all fields');
-            return ;
-        }
-
-        addWaiter('create-new-user');
-
-        axios.post(`/pim/users`, newUser)
-        .then(res => {
-            alert('User added successfully');
-        })
-        .catch(err => {
-            alert(`Error adding user: ${err.response.data.message}`);
-            
-        })
-        .finally(() => {
-            setShowCreateUserModal(false);
-            removeWaiter('create-new-user');
-        });
-    }
-
   return (
     <div className=' w-full flex-1 flex flex-col gap-3 px-[5rem] py-7'>
-        <div className=' w-full flex flex-row justify-between items-center my-2'>
-            <h1 className=' text-[2rem]'>Employee Information</h1>
-            {
-                !employeeData.username && employeeData.username !== '' &&
-                <button 
-                    className='btn btn-outline border-2 border-black' 
-                    onClick={() => setShowCreateUserModal(true)}
-                > 
-                    Create User Account 
-                </button>
-            }
-        </div>
+        <h1 className=' text-[2rem] text-center'>Profile</h1>
 
         <div className=' w-full flex flex-col border border-black rounded px-4 py-10'>
-            <EmployeeDetailsForm  employeeData={employeeData} editable={true} handleEdit={handleEmployeeDetailsEdit}/>
+            <ProfileDetailsForm  employeeData={employeeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl1'} handleEdit={handleEmployeeDetailsEdit}/>
 
             <div className=' divider' />
 
@@ -247,13 +203,15 @@ const EmployeeDetails = () => {
                 <h1 className=' text-[1.5rem] my-3'>Custom attributes</h1>
             </div>
 
-            <EmployeeCustomAttributeForm attributeData={attributeData} editable={true} handleEdit={handleCustomAttributeEdit} />
+            <EmployeeCustomAttributeForm attributeData={attributeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl1'} handleEdit={handleCustomAttributeEdit} />
 
             <div className=' divider' />
 
             <div className=' w-full flex flex-row justify-between items-center mb-2'>
                 <h1 className=' text-[1.5rem] my-3'>Dependants</h1>
-                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowDependantModal(true)}>Add Dependant</button>
+                {(role === 'Admin' || role === 'Manager') && (
+                    <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowDependantModal(true)}>Add Dependant</button>
+                )}
             </div>
 
             <DependentTable tableData={dependantData} handleDelete={handleDependantDelete} handleEdit={handleDependantEdit} />
@@ -262,7 +220,9 @@ const EmployeeDetails = () => {
 
             <div className=' w-full flex flex-row justify-between items-center mb-2'>
                 <h1 className=' text-[1.5rem] my-3'>Contact Information</h1>
-                <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowContactModal(true)}>Add Contact</button>
+                {(role === 'Admin' || role === 'Manager') && (
+                    <button className=' btn btn-md w-[6rem] sm:w-auto btn-outline' onClick={() => setShowContactModal(true)}>Add Contact</button>
+                )}
             </div>
 
             <ContactTable tableData={contactData} handleDelete={handleContactDelete} handleEdit={handleContactEdit} />
@@ -355,40 +315,6 @@ const EmployeeDetails = () => {
                     </form>
                 </div>
             </Modal>
-
-            <Modal isVisible={showCreateUserModal} className={`bg-white rounded-xl py-[2rem] px-[1rem]`} >
-            <div className=' w-full flex flex-col justify-start items-center gap-5'>
-                    <h1 className=' text-[2rem]'>Create User Account</h1>
-                    <form method='dialog' className=' text-[1.2rem] px-10 w-full flex flex-col items-center justify-start gap-4' onClick={(e) => e.preventDefault()}>
-                        <div className=' w-full flex flex-row items-center justify-center gap-5'>
-                            <label htmlFor="username" className=' flex-1 pl-1'>Username :</label>
-                            <input 
-                                type="text" 
-                                id='username' 
-                                className=' input h-[2.5rem] flex-1 px-2 bg-white border border-black rounded-md'
-                                ref={usernameRef} 
-                            />
-                        </div>
-                        <div className=' w-full flex flex-row items-center justify-center gap-5'>
-                            <label htmlFor="contact_no" className=' flex-1 pl-1'>User Role :</label>
-                            <select className=' select select-bordered' name="userRole" id="userRole" ref={userRoleRef}>
-                                <option value="" disabled>Select User Role</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Manager">Manager</option>
-                                <option value="Employee_lvl1">Employee_lvl1</option>
-                                <option value="Employee_lvl2">Employee_lvl2</option>
-                            </select>
-                        </div>
-                        <div className=' w-full flex flex-row items-center justify-center gap-5'>
-                            <button className='btn btn-outline mt-2' onClick={() => setShowCreateUserModal(false)}>Cancel</button>
-                            <button className='btn btn-outline mt-2' onClick={handleCreateUser}>Add User</button>
-                        </div>
-
-                    </form>
-                </div>
-            </Modal>
-
-            
         </div>
 
         
@@ -396,4 +322,4 @@ const EmployeeDetails = () => {
   )
 }
 
-export default EmployeeDetails
+export default Profile

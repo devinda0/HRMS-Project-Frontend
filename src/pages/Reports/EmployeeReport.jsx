@@ -62,7 +62,7 @@ const EmployeeReport = () => {
     }
 
   return (
-    <div className=' w-full bg-custompurple px-[1.5rem] md:px-[2rem] lg:px-[5rem] py-7'>
+    <div className=' w-full flex-1 bg-custompurple px-[1.5rem] md:px-[2rem] lg:px-[5rem] py-7'>
         <h1 className='text-black text-[2.5rem] text-center'>Employee Report</h1>
 
         <form className=' w-full flex flex-row justify-center gap-3 sm:gap-5 flex-wrap my-4' onSubmit={(e) => e.preventDefault()}>

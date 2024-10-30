@@ -28,7 +28,7 @@ const EmployeeTable = ({className, tableData, startIndex = 1}) => {
             {
                 tableData.map((data, index) => {
                     return (
-                        <tr className=' hover:scale-105' key={index} onClick={(e) => navigate(`${data.employee_id}`)}>
+                        <tr className=' hover:scale-[1.01] cursor-pointer' key={index} onClick={(e) => navigate(`${data.employee_id}`)}>
                             <th>{index + startIndex}</th>
                             {
                                 tableHeaders.map((header, index) => (
