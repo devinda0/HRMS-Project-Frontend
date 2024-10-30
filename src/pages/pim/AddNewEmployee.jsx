@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import EmployeeDetailsForm from '../../Components/Form/EmployeeDetailsForm';
 import useAxios from '../../hooks/useAxios';
 import { useNavigate } from 'react-router-dom';
-
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 const defaultEmployeeData = {
     employee_id : '',
     name : '',
@@ -25,7 +25,7 @@ const AddNewEmployee = () => {
     const [employeeData, setEmployeeData] = useState({...defaultEmployeeData});
     const axios = useAxios();
     const navigate = useNavigate();
-
+    const { addWaiter, removeWaiter } = useWaitingSpinner();
     const handleEmployeeDetailsEdit = (formData) => {
         console.log(formData);
         addWaiter('addemployee');
