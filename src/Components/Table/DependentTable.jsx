@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { FaRegEdit } from 'react-icons/fa'
 import { FiSave } from 'react-icons/fi';
 import { MdDeleteForever } from 'react-icons/md';
+import useAuth from '../../hooks/useAuth';
 
 const TableRows = ({data, handleEdit, handleDelete}) => {
     const [disabled, setDisabled] = useState(true);
     const [tempData, setTempData] = useState(data);
+    const { role } = useAuth();
 
     useEffect(() => {
         if(!!!data) return;
@@ -80,21 +82,26 @@ const TableRows = ({data, handleEdit, handleDelete}) => {
                     disabled={disabled} 
                 />
             </td>
-            <th>
-                {
-                    disabled ? 
-                    <FaRegEdit className=' scale-[1.75]' onClick={() => setDisabled(false)} /> : 
-                    <FiSave className=' scale-[1.75]' onClick={handleSave} /> 
+            {(role === 'Admin' || role === 'Manager'|| role === 'Employee_lvl2') && (
+            <>
+                <th>
+                {disabled ? 
+                    <FaRegEdit className='scale-[1.75]' onClick={() => setDisabled(false)} /> : 
+                    <FiSave className='scale-[1.75]' onClick={handleSave} />
                 }
-            </th>
-            <th>
-                <MdDeleteForever className=' scale-[1.75]' onClick={() => handleDelete(data)} />
-            </th>
+                </th>
+                <th>
+                <MdDeleteForever className='scale-[1.75]' onClick={() => handleDelete(data)} />
+                </th>
+            </>
+            )}
+
         </tr>
     )
 }
 
 const DependentTable = ({className, tableData, handleEdit, handleDelete}) => {
+    const { role } = useAuth();
 
   return (
     <div className={`overflow-x-auto bg-purple-200 ${className}`}>
@@ -106,8 +113,12 @@ const DependentTable = ({className, tableData, handleEdit, handleDelete}) => {
                 <th>Birthday</th>
                 <th>Gender</th>
                 <th>Relation</th>
-                <th></th>
-                <th></th>
+                {(role === 'Admin' || role === 'Manager'|| role === 'Employee_lvl2') && (
+                    <>
+                        <th></th>
+                        <th></th>
+                    </>
+                )}
             </tr>
             </thead>
             <tbody>

@@ -7,6 +7,8 @@ import ContactTable from '../../Components/Table/ContactTable';
 import Modal from '../../Components/Modal/Modal';
 import EmployeeCustomAttributeForm from '../../Components/Form/EmployeeCustomAttributeForm';
 import useWaitingSpinner from '../../hooks/useWaitingSpinner';
+
+
 const EmployeeDetails = () => {
     const { id } = useParams();
     const [employeeData, setEmployeeData] = useState({});
@@ -23,7 +25,11 @@ const EmployeeDetails = () => {
     const contactNoRef = useRef(null);
     const contactRelationRef = useRef(null);
     const [attributeData, setAttributeData] = useState({});
-    const { addWaiter, removeWaiter } = useWaitingSpinner();
+    const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+    const usernameRef = useRef(null);
+    const userRoleRef = useRef(null);
+    const {addWaiter, removeWaiter} = useWaitingSpinner();
+
     useEffect(() => {
         addWaiter('login');
         axios.get(`/pim/employees/${id}`)
@@ -232,9 +238,48 @@ const EmployeeDetails = () => {
 
     }
 
+    const handleCreateUser = () => {
+        const newUser = {
+            username : usernameRef.current?.value,
+            role : userRoleRef.current?.value,
+            employee_id : id
+        }
+
+        if(!newUser.username || !newUser.role){
+            alert('Please fill in all fields');
+            return ;
+        }
+
+        addWaiter('create-new-user');
+
+        axios.post(`/pim/users`, newUser)
+        .then(res => {
+            alert('User added successfully');
+        })
+        .catch(err => {
+            alert(`Error adding user: ${err.response.data.message}`);
+            
+        })
+        .finally(() => {
+            setShowCreateUserModal(false);
+            removeWaiter('create-new-user');
+        });
+    }
+
   return (
     <div className=' w-full flex-1 flex flex-col gap-3 px-[5rem] py-7'>
-        <h1 className=' text-[2rem]'>Employee Information</h1>
+        <div className=' w-full flex flex-row justify-between items-center my-2'>
+            <h1 className=' text-[2rem]'>Employee Information</h1>
+            {
+                !employeeData.username && employeeData.username !== '' &&
+                <button 
+                    className='btn btn-outline border-2 border-black' 
+                    onClick={() => setShowCreateUserModal(true)}
+                > 
+                    Create User Account 
+                </button>
+            }
+        </div>
 
         <div className=' w-full flex flex-col border border-black rounded px-4 py-10'>
             <EmployeeDetailsForm  employeeData={employeeData} editable={true} handleEdit={handleEmployeeDetailsEdit}/>
@@ -353,6 +398,40 @@ const EmployeeDetails = () => {
                     </form>
                 </div>
             </Modal>
+
+            <Modal isVisible={showCreateUserModal} className={`bg-white rounded-xl py-[2rem] px-[1rem]`} >
+            <div className=' w-full flex flex-col justify-start items-center gap-5'>
+                    <h1 className=' text-[2rem]'>Create User Account</h1>
+                    <form method='dialog' className=' text-[1.2rem] px-10 w-full flex flex-col items-center justify-start gap-4' onClick={(e) => e.preventDefault()}>
+                        <div className=' w-full flex flex-row items-center justify-center gap-5'>
+                            <label htmlFor="username" className=' flex-1 pl-1'>Username :</label>
+                            <input 
+                                type="text" 
+                                id='username' 
+                                className=' input h-[2.5rem] flex-1 px-2 bg-white border border-black rounded-md'
+                                ref={usernameRef} 
+                            />
+                        </div>
+                        <div className=' w-full flex flex-row items-center justify-center gap-5'>
+                            <label htmlFor="contact_no" className=' flex-1 pl-1'>User Role :</label>
+                            <select className=' select select-bordered' name="userRole" id="userRole" ref={userRoleRef}>
+                                <option value="" disabled>Select User Role</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Employee_lvl1">Employee_lvl1</option>
+                                <option value="Employee_lvl2">Employee_lvl2</option>
+                            </select>
+                        </div>
+                        <div className=' w-full flex flex-row items-center justify-center gap-5'>
+                            <button className='btn btn-outline mt-2' onClick={() => setShowCreateUserModal(false)}>Cancel</button>
+                            <button className='btn btn-outline mt-2' onClick={handleCreateUser}>Add User</button>
+                        </div>
+
+                    </form>
+                </div>
+            </Modal>
+
+            
         </div>
 
         

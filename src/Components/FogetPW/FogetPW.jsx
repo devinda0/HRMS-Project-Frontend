@@ -1,16 +1,37 @@
 import React, { useState } from 'react';
+import useAxios from '../../hooks/useAxios';
+import useWaitingSpinner from '../../hooks/useWaitingSpinner';
 
 const ForgotPassword = ({ isOpen, onClose }) => {
   
   const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
+  const axios = useAxios();
+  const { addWaiter, removeWaiter } = useWaitingSpinner();
 
   
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Reset request for:", { userId, email });
+    
+    if(!axios) return;
+    addWaiter('forgot-password');
+
+    axios.post('/user/forgot-password', {
+      username: userId,
+      email: email
+    })
+    .then(res => {
+      alert('New Password sent to your email');
+    })
+    .catch(err => {
+      console.log(err);
+      alert('Error sending new password');
+    })
+    .finally(() => {
+      removeWaiter('forgot-password');
+    });
     
     onClose(); 
   };

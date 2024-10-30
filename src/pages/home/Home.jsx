@@ -53,6 +53,7 @@ const Home = () => {
 
       {/* Main Section */}
       <div className="p-10 flex justify-center w-10/12 space-x-6">
+      { (role === 'Admin' || role === 'Manager') &&
         <Link to="/pim-module" className="block w-full">
           <div className="bg-white p-6 rounded-lg items-center justify-center border-[2px] border-transparent hover:border-[#723BE9] shadow-xl lg:h-44 transition-shadow duration-300">
             <div className="flex items-center justify-center mb-4">
@@ -64,6 +65,7 @@ const Home = () => {
             </p>
           </div>
         </Link>
+      }
 
         <Link to="/absent-management" className="block w-full lg:h-44">
           <div className="bg-white px-6 py-4 rounded-lg border-[2px] border-transparent hover:border-[#723BE9] shadow-xl lg:h-44 transition-shadow duration-300">
@@ -77,7 +79,7 @@ const Home = () => {
           </div>
         </Link>
 
-        {role === 'CEO' && (
+        {(role === 'Admin') && (
           <Link to="/ceo-dashboard" className="block w-full lg:h-44">
             <div className="bg-white p-6 rounded-lg border-[2px] border-transparent hover:border-[#723BE9] shadow-xl lg:h-44 transition-shadow duration-300">
               <div className="flex items-center justify-center mb-6">

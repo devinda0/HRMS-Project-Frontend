@@ -8,7 +8,7 @@ const LeaveApplication = () => {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [reason, setReason] = useState('');
-  const [attachments, setAttachments] = useState([]);
+  // const [attachments, setAttachments] = useState([]);
   const axios = useAxios();
   const { addWaiter, removeWaiter } = useWaitingSpinner();
   const handleSubmit = (e) => {
@@ -82,13 +82,13 @@ const LeaveApplication = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-textcolor font-normal text-lg mb-2 font-manrope">Attachments</label>
+          {/* <label className="block text-textcolor font-normal text-lg mb-2 font-manrope">Attachments</label>
           <input
             type="file"
             className="w-full px-3 py-2 bg-white border border-bordercolor rounded-md"
             multiple
             onChange={(e) => setAttachments(Array.from(e.target.files))}
-          />
+          /> */}
         </div>
 
         <button
