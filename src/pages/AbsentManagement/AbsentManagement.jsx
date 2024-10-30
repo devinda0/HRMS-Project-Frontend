@@ -33,7 +33,6 @@ const AbsentManagement = () => {
 
     axios.get('/absence/is_supervisor')
     .then(res => {
-      console.log(res.data);
       setIsSupervisor(res.data);
     })
     .catch(err => {
@@ -57,7 +56,7 @@ const AbsentManagement = () => {
               <div className='basis-4/5 items-center ml-4 mt-1'>
                 <h1 className="text-3xl font-bold mb-3 font-lexend">Emily Anderson</h1>
                 {
-                  <ModeToggleButton />
+                  isSupervisor && <ModeToggleButton />
                 }
               </div>
             </div>

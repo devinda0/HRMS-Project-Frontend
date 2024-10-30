@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import ContactHRAdmin from '../../Components/ContactAdmin/ContactAdmin';
 import { Link } from 'react-router-dom';
 
@@ -62,7 +62,7 @@ const TermsOfService = () => {
             <>
               For any questions or concerns regarding these Terms of Service, please contact your HR representative.
               <div onClick={handleContactClick} className="mt-2">
-                <a href="#" className="text-blue-500 hover:underline">Contact HR Admin</a>
+                <a href="" className="text-blue-500 hover:underline">Contact HR Admin</a>
               </div>
             </>
           }
