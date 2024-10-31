@@ -416,7 +416,6 @@ const EmployeeDetails = () => {
                             <label htmlFor="contact_no" className=' flex-1 pl-1'>User Role :</label>
                             <select className=' select select-bordered' name="userRole" id="userRole" ref={userRoleRef}>
                                 <option value="" disabled>Select User Role</option>
-                                <option value="Admin">Admin</option>
                                 <option value="Manager">Manager</option>
                                 <option value="Employee_lvl1">Employee_lvl1</option>
                                 <option value="Employee_lvl2">Employee_lvl2</option>
