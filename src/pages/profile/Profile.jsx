@@ -240,7 +240,7 @@ const Profile = () => {
         <h1 className=' text-[2rem] text-center'>Profile</h1>
 
         <div className=' w-full flex flex-col border border-black rounded px-4 py-10'>
-            <ProfileDetailsForm  employeeData={employeeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl1'} handleEdit={handleEmployeeDetailsEdit}/>
+            <ProfileDetailsForm  employeeData={employeeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl2'} handleEdit={handleEmployeeDetailsEdit}/>
 
             <div className=' divider' />
 
@@ -248,7 +248,7 @@ const Profile = () => {
                 <h1 className=' text-[1.5rem] my-3'>Custom attributes</h1>
             </div>
 
-            <EmployeeCustomAttributeForm attributeData={attributeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl1'} handleEdit={handleCustomAttributeEdit} />
+            <EmployeeCustomAttributeForm attributeData={attributeData} editable={role === 'Admin' || role === 'Manager' || role==='Employee_lvl2'} handleEdit={handleCustomAttributeEdit} />
 
             <div className=' divider' />
 
